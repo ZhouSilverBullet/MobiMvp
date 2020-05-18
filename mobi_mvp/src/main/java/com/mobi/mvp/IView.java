@@ -1,5 +1,6 @@
 package com.mobi.mvp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.Nullable;
 
@@ -11,10 +12,10 @@ import android.support.annotation.Nullable;
  */
 public interface IView {
     /**
-     * 用于rxjava生命周期监听
+     * 用于rxjava生命周期监听, dialog显示
      *
      * @return
      */
     @Nullable
-    Context getMvpContext();
+    Activity getMvpActivity();
 }

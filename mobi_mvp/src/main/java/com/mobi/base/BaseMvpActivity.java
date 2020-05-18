@@ -1,6 +1,6 @@
 package com.mobi.base;
 
-import android.content.Context;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -39,7 +39,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends BaseActiv
 
     @Nullable
     @Override
-    public Context getMvpContext() {
+    public Activity getMvpActivity() {
         return this;
     }
 
