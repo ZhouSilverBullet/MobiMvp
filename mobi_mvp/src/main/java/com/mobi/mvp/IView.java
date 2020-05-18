@@ -1,5 +1,8 @@
 package com.mobi.mvp;
 
+import android.content.Context;
+import android.support.annotation.Nullable;
+
 /**
  * @author zhousaito
  * @version 1.0
@@ -7,4 +10,11 @@ package com.mobi.mvp;
  * @Dec 略
  */
 public interface IView {
+    /**
+     * 用于rxjava生命周期监听
+     *
+     * @return
+     */
+    @Nullable
+    Context getMvpContext();
 }

@@ -1,13 +1,13 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion Integer.parseInt("${appCompileSdkVersion}")
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion Integer.parseInt("${appMinSdkVersion}")
+        targetSdkVersion Integer.parseInt("${appCompileSdkVersion}")
+        versionCode Integer.parseInt("${appVersionCode}")
+        versionName "${appVersionName}"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -29,7 +29,27 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    //support
+    implementation "com.android.support:appcompat-v7:${supportV7}"
+
+    //network
+    api "io.reactivex.rxjava2:rxjava:${rxjava}"
+    api "io.reactivex.rxjava2:rxandroid:${rxandroid}"
+    api "com.squareup.retrofit2:retrofit:${retrofit}"
+    api "com.squareup.retrofit2:adapter-rxjava2:${retrofit}"
+    api "com.squareup.retrofit2:converter-scalars:${retrofit}"
+    api "com.squareup.retrofit2:converter-gson:${retrofit}"
+    api "com.squareup.okhttp3:okhttp:${okhttp3}"
+    api "com.squareup.okhttp3:logging-interceptor:${okhttp3}"
+
+    api "com.trello.rxlifecycle2:rxlifecycle:${rxlifecycle2}"
+    api "com.trello.rxlifecycle2:rxlifecycle-android:${rxlifecycle2}"
+    api "com.trello.rxlifecycle2:rxlifecycle-components:${rxlifecycle2}"
+
+    implementation "com.jakewharton:butterknife:${butterknife}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${butterknife}"
+
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

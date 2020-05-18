@@ -5,12 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".TestActivity">
 
     <Button
-        android:id="@+id/btnSkipTest"
-        android:text="测试一下生命周期"
+        android:id="@+id/btnSkipSelf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
 </LinearLayout>
