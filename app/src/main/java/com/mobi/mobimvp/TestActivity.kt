@@ -3,6 +3,7 @@ package com.mobi.mobimvp
 import com.mobi.base.BaseMvpActivity
 import com.mobi.mobimvp.presenter.TestPresenter
 import com.mobi.util.LogUtils
+import kotlinx.android.synthetic.main.activity_test.*
 
 class TestActivity : BaseMvpActivity<TestPresenter>() {
     val TAG = "TestActivity"
@@ -13,6 +14,12 @@ class TestActivity : BaseMvpActivity<TestPresenter>() {
 
     override fun getLayoutId(): Int {
        return R.layout.activity_test
+    }
+
+    override fun initEvent() {
+        btnSkipSelf.setOnClickListener {
+            showProgressDialog(true, "加载中...")
+        }
     }
 
 

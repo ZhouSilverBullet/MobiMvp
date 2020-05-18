@@ -33,14 +33,14 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${supportV7}"
 
     //network
-    api "io.reactivex.rxjava2:rxjava:${rxjava}"
-    api "io.reactivex.rxjava2:rxandroid:${rxandroid}"
-    api "com.squareup.retrofit2:retrofit:${retrofit}"
-    api "com.squareup.retrofit2:adapter-rxjava2:${retrofit}"
-    api "com.squareup.retrofit2:converter-scalars:${retrofit}"
-    api "com.squareup.retrofit2:converter-gson:${retrofit}"
-    api "com.squareup.okhttp3:okhttp:${okhttp3}"
-    api "com.squareup.okhttp3:logging-interceptor:${okhttp3}"
+//    api "io.reactivex.rxjava2:rxjava:${rxjava}"
+//    api "io.reactivex.rxjava2:rxandroid:${rxandroid}"
+//    api "com.squareup.retrofit2:retrofit:${retrofit}"
+//    api "com.squareup.retrofit2:adapter-rxjava2:${retrofit}"
+//    api "com.squareup.retrofit2:converter-scalars:${retrofit}"
+//    api "com.squareup.retrofit2:converter-gson:${retrofit}"
+//    api "com.squareup.okhttp3:okhttp:${okhttp3}"
+//    api "com.squareup.okhttp3:logging-interceptor:${okhttp3}"
 
     api "com.trello.rxlifecycle2:rxlifecycle:${rxlifecycle2}"
     api "com.trello.rxlifecycle2:rxlifecycle-android:${rxlifecycle2}"

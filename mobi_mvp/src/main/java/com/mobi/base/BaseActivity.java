@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.mobi.dialog.LoadingDialog;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import butterknife.ButterKnife;
@@ -19,6 +20,7 @@ import butterknife.Unbinder;
 public abstract class BaseActivity extends RxAppCompatActivity {
     //butterKnife 绑定
     private Unbinder bind;
+    private LoadingDialog mLoadingDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,8 +33,8 @@ public abstract class BaseActivity extends RxAppCompatActivity {
             initVariables(getIntent());
         }
 
-        initView(savedInstanceState);
         initView();
+        initView(savedInstanceState);
         initEvent();
         initData();
     }
@@ -87,5 +89,31 @@ public abstract class BaseActivity extends RxAppCompatActivity {
             bind.unbind();
         }
         bind = null;
+    }
+
+    protected void showProgressDialog() {
+        showProgressDialog(true, null);
+    }
+
+    protected void showProgressDialog(boolean isCancel) {
+        showProgressDialog(isCancel, null);
+    }
+
+    protected void showProgressDialog(boolean isCancel, String message) {
+        if (!isFinishing()) {
+            if (mLoadingDialog == null) {
+                mLoadingDialog = new LoadingDialog(this);
+            }
+            mLoadingDialog.setCancelable(isCancel);
+            mLoadingDialog.show();
+            mLoadingDialog.setMessage(message);
+        }
+    }
+
+    protected void closeProgressDialog() {
+        if (mLoadingDialog != null) {
+            mLoadingDialog.dismiss();
+            mLoadingDialog = null;
+        }
     }
 }
