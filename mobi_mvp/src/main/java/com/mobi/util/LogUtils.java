@@ -14,7 +14,7 @@ public class LogUtils {
 
     //for error log
     public static void error(String msg) {
-        if (MobiSession.getInstance().isDebug()) {
+        if (isDebug()) {
             msg = handleMsg(msg);
             Log.e(log_mobi, msg);
         }
@@ -22,7 +22,7 @@ public class LogUtils {
 
     //for warming log
     public static void warn(String msg) {
-        if (MobiSession.getInstance().isDebug()) {
+        if (isDebug()) {
             msg = handleMsg(msg);
             Log.w(log_mobi, msg);
         }
@@ -30,7 +30,7 @@ public class LogUtils {
 
     //for info log
     public static void info(String msg) {
-        if (MobiSession.getInstance().isDebug()) {
+        if (isDebug()) {
             msg = handleMsg(msg);
             Log.i(log_mobi, msg);
         }
@@ -38,7 +38,7 @@ public class LogUtils {
 
     //for debug log
     public static void debug(String msg) {
-        if (MobiSession.getInstance().isDebug()) {
+        if (isDebug()) {
             msg = handleMsg(msg);
             Log.d(log_mobi, msg);
         }
@@ -46,7 +46,7 @@ public class LogUtils {
 
     //for verbose log
     public static void verbose(String msg) {
-        if (MobiSession.getInstance().isDebug()) {
+        if (isDebug()) {
             msg = handleMsg(msg);
             Log.v(log_mobi, msg);
         }
@@ -54,7 +54,7 @@ public class LogUtils {
 
     //for error log
     public static void e(String msg) {
-        if (MobiSession.getInstance().isDebug()) {
+        if (isDebug()) {
             msg = handleMsg(msg);
             Log.e(log_mobi, msg);
         }
@@ -62,7 +62,7 @@ public class LogUtils {
 
     //for warming log
     public static void w(String msg) {
-        if (MobiSession.getInstance().isDebug()) {
+        if (isDebug()) {
             msg = handleMsg(msg);
             Log.w(log_mobi, msg);
         }
@@ -70,7 +70,7 @@ public class LogUtils {
 
     //for info log
     public static void i(String msg) {
-        if (MobiSession.getInstance().isDebug()) {
+        if (isDebug()) {
             msg = handleMsg(msg);
             Log.i(log_mobi, msg);
         }
@@ -78,7 +78,7 @@ public class LogUtils {
 
     //for debug log
     public static void d(String msg) {
-        if (MobiSession.getInstance().isDebug()) {
+        if (isDebug()) {
             msg = handleMsg(msg);
             Log.d(log_mobi, msg);
         }
@@ -86,7 +86,7 @@ public class LogUtils {
 
     //for verbose log
     public static void v(String msg) {
-        if (MobiSession.getInstance().isDebug()) {
+        if (isDebug()) {
             msg = handleMsg(msg);
             Log.v(log_mobi, msg);
         }
@@ -95,7 +95,7 @@ public class LogUtils {
 
     //for warming log
     public static void w(String tag, String msg) {
-        if (MobiSession.getInstance().isDebug()) {
+        if (isDebug()) {
             if (tag == null || "".equalsIgnoreCase(tag.trim())) {
                 tag = log_mobi;
             }
@@ -106,7 +106,7 @@ public class LogUtils {
 
     //for info log
     public static void i(String tag, String msg) {
-        if (MobiSession.getInstance().isDebug()) {
+        if (isDebug()) {
             if (tag == null || "".equalsIgnoreCase(tag.trim())) {
                 tag = log_mobi;
             }
@@ -117,7 +117,7 @@ public class LogUtils {
 
     //for debug log
     public static void d(String tag, String msg) {
-        if (MobiSession.getInstance().isDebug()) {
+        if (isDebug()) {
             if (tag == null || "".equalsIgnoreCase(tag.trim())) {
                 tag = log_mobi;
             }
@@ -128,7 +128,7 @@ public class LogUtils {
 
     //for verbose log
     public static void v(String tag, String msg) {
-        if (MobiSession.getInstance().isDebug()) {
+        if (isDebug()) {
             if (tag == null || "".equalsIgnoreCase(tag.trim())) {
                 tag = log_mobi;
             }
@@ -139,7 +139,7 @@ public class LogUtils {
 
     //for verbose log
     public static void e(String tag, String msg) {
-        if (MobiSession.getInstance().isDebug()) {
+        if (isDebug()) {
             if (tag == null || "".equalsIgnoreCase(tag.trim())) {
                 tag = log_mobi;
             }
@@ -160,7 +160,7 @@ public class LogUtils {
      * 点击Log跳转到指定源码位置
      */
     public static void showLog(String tag, String msg) {
-        if (MobiSession.getInstance().isDebug() && !TextUtils.isEmpty(msg)) {
+        if (isDebug() && !TextUtils.isEmpty(msg)) {
             if (TextUtils.isEmpty(tag)) {
                 tag = log_mobi;
             }
@@ -186,5 +186,9 @@ public class LogUtils {
                 Log.i(tag, msg);
             }
         }
+    }
+
+    private static boolean isDebug() {
+        return MobiSession.getInstance().isDebug();
     }
 }

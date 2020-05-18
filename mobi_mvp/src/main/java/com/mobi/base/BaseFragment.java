@@ -1,5 +1,7 @@
 package com.mobi.base;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -24,8 +26,14 @@ public abstract class BaseFragment extends Fragment {
 
     private Unbinder mUnbinder;
     protected LoadingDialog mLoadingDialog;
-    protected AppCompatActivity mContext;
     protected View mRootView;
+    protected Context mContext;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,7 +45,6 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mContext = (AppCompatActivity) getActivity();
         initVariables();
         initView();
         initData();
@@ -81,8 +88,17 @@ public abstract class BaseFragment extends Fragment {
         if (mUnbinder != null) {
             mUnbinder.unbind();
         }
+        mUnbinder = null;
 
 //        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 判断fragment 是否添加在了activity上面
+     * @return
+     */
+    public boolean isCanUseFragment() {
+        return mContext instanceof Activity && isAdded();
     }
 
     protected void showProgressDialog() {
@@ -94,7 +110,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected void showProgressDialog(boolean isCancel, String message) {
-        if (null != mContext && !mContext.isFinishing()) {
+        if (mContext != null) {
             if (mLoadingDialog == null) {
                 mLoadingDialog = new LoadingDialog(getActivity());
             }

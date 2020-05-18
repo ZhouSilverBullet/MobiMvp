@@ -30,7 +30,7 @@ public final class ToastUtils {
 
     private static final int DEFAULT_COLOR = 0x12000000;
     private static Toast sToast;
-    private static int gravity = Gravity.CENTER ;
+    private static int gravity = Gravity.CENTER;
     private static int xOffset = 0;
     private static int yOffset = 0;
     private static int backgroundColor = DEFAULT_COLOR;
