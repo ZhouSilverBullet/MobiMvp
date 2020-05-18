@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mobi.mvp.BasePresenter;
-
 
 /**
  * Fragment预加载问题的解决方案：

@@ -3,14 +3,13 @@ package com.mobi.base;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mobi.dialog.LoadingDialog;
 import com.mobi.util.ToastUtils;
+import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -22,7 +21,7 @@ import butterknife.Unbinder;
  * 描述：视图控制基类
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends RxFragment {
 
     private Unbinder mUnbinder;
     protected LoadingDialog mLoadingDialog;
