@@ -20,7 +20,7 @@ public class DownloadThread extends Thread {
     private int threadId;
     private long startIndex;
     private long endIndex;
-    private IDownloadFileCallBack callBack;
+    private IFileDownloadCallback callBack;
     private long currentThreadTotal;//当前线程下载文件的总大小
     private File downThreadFile;
 
@@ -37,7 +37,7 @@ public class DownloadThread extends Thread {
                           long endIndex,
                           String httpUrl,
                           String targetPath,
-                          IDownloadFileCallBack callBack) {
+                          IFileDownloadCallback callBack) {
         this.threadId = threadId;
         this.startIndex = startIndex;
         this.endIndex = endIndex;
@@ -82,7 +82,7 @@ public class DownloadThread extends Thread {
             //证明已经下载完成
             if (startIndex >= endIndex) {
                 if (callBack != null) {
-                    callBack.onFinished(null);
+                    callBack.onFinished();
                 }
                 return;
             }
@@ -129,20 +129,20 @@ public class DownloadThread extends Thread {
                 System.out.println("线程" + threadId + "下载完毕");
 
                 if (callBack != null) {
-                    callBack.onFinished(null);
+                    callBack.onFinished();
                 }
             } else {
                 System.out.println("响应码是" + connection.getResponseCode() + ". 服务器不支持多线程下载");
                 if (callBack != null) {
                     IllegalAccessException e = new IllegalAccessException("响应码是" +
                             connection.getResponseCode() + ". 服务器不支持多线程下载");
-                    callBack.onError(null, e);
+                    callBack.onError(e);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
             if (callBack != null) {
-                callBack.onError(null, e);
+                callBack.onError(e);
             }
         }
 

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class FileDownload implements Runnable, IDownloadFileCallBack {
+public class FileDownload implements Runnable, IFileDownloadCallback {
 
     private String path = "https://fga1.market.xiaomi.com/download/AppStore/0140049b1a5a4494e6bcb744f74ddab8c0d417de2/com.sdxxtop.zhidian.apk";
     private String targetFilePath = "apk2/";  //下载文件存放目录
@@ -104,40 +104,42 @@ public class FileDownload implements Runnable, IDownloadFileCallBack {
     }
 
 
-    public static void main(String[] args) {
-        try {
-            final FileDownload apk2 = new FileDownload("https://fga1.market.xiaomi.com/download/AppStore/0140049b1a5a4494e6bcb744f74ddab8c0d417de2/com.sdxxtop.zhidian.apk",
-                    "apk2");
-            apk2.setCallBack(new IDownloadFileCallBack() {
-                @Override
-                public void onStart() {
-                    System.err.println("onStart");
-                }
+//    public static void main(String[] args) {
+//        try {
+//            final FileDownload apk2 = new FileDownload("https://fga1.market.xiaomi.com/download/AppStore/0140049b1a5a4494e6bcb744f74ddab8c0d417de2/com.sdxxtop.zhidian.apk",
+//                    "apk2");
+//            apk2.setCallBack(new IDownloadFileCallBack() {
+//                @Override
+//                public void onStart() {
+//                    System.err.println("onStart");
+//                }
+//
+//                @Override
+//                public void onUpdateProgress(long progress) {
+//                    System.err.println("progress : " + progress + "%");
+//                }
+//
+//                @Override
+//                public void onFinished(String path) {
+//                    System.err.println("onFinished path = " + path);
+//                }
+//
+//                @Override
+//                public void onError(String path, Exception e) {
+//                    System.err.println("onFinished e = " + e);
+//                }
+//            });
+//            apk2.download();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-                @Override
-                public void onUpdateProgress(long progress) {
-                    System.err.println("progress : " + progress + "%");
-                }
-
-                @Override
-                public void onFinished(String path) {
-                    System.err.println("onFinished path = " + path);
-                }
-
-                @Override
-                public void onError(String path, Exception e) {
-                    System.err.println("onFinished e = " + e);
-                }
-            });
-            apk2.download();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onStart() {
+    /**
+     * 告知外面启动开始
+     */
+    private void onStart() {
         if (callBack != null) {
             callBack.onStart();
         }
@@ -157,7 +159,7 @@ public class FileDownload implements Runnable, IDownloadFileCallBack {
     }
 
     @Override
-    public void onFinished(String path) {
+    public void onFinished() {
         int running = threadRunningAtc.decrementAndGet();
         if (running <= 0 && callBack != null) {
             callBack.onFinished(this.path);
@@ -169,7 +171,7 @@ public class FileDownload implements Runnable, IDownloadFileCallBack {
     }
 
     @Override
-    public void onError(String path, Exception e) {
+    public void onError(Exception e) {
         if (callBack != null) {
             callBack.onError(this.path, e);
         }
@@ -186,7 +188,6 @@ public class FileDownload implements Runnable, IDownloadFileCallBack {
             }
         }
     }
-
 
 }
 
