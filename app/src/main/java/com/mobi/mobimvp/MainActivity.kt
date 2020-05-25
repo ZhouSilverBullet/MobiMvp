@@ -14,5 +14,9 @@ class MainActivity : AppCompatActivity() {
         btnSkipTest.setOnClickListener {
             startActivity(Intent(this, TestActivity::class.java))
         }
+
+        btnSkipDownload.setOnClickListener {
+            startActivity(Intent(this, DownloadActivity::class.java))
+        }
     }
 }
