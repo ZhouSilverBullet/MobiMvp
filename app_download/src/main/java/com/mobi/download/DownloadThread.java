@@ -50,13 +50,20 @@ public class DownloadThread extends Thread {
     @Override
     public void run() {
         System.out.println("线程" + threadId + "开始下载");
+
+        //用于文件缓存长度
+        RandomAccessFile downThreadStream = null;
+        //文件流
+        InputStream inputStream = null;
+        //文件存储
+        RandomAccessFile randomAccessFile = null;
+
         try {
             //分段请求网络连接,分段将文件保存到本地.
             URL url = new URL(httpUrl);
-
             //加载下载位置的文件
             downThreadFile = new File(targetFilePath, FileUtil.getFileName(url) + "_downThread_" + threadId + ".dt");
-            RandomAccessFile downThreadStream = null;
+
             //如果文件存在
             if (downThreadFile.exists()) {
                 downThreadStream = new RandomAccessFile(downThreadFile, "rwd");
@@ -95,9 +102,9 @@ public class DownloadThread extends Thread {
             //200：请求全部资源成功， 206代表部分资源请求成功
             if (connection.getResponseCode() == 206) {
                 //获取流
-                InputStream inputStream = connection.getInputStream();
+                inputStream = connection.getInputStream();
                 //获取前面已创建的文件.
-                RandomAccessFile randomAccessFile = new RandomAccessFile(
+                randomAccessFile = new RandomAccessFile(
                         new File(targetFilePath, FileUtil.getFileName(url)), "rw");
                 //文件写入的开始位置.
                 randomAccessFile.seek(startIndex);
@@ -121,9 +128,6 @@ public class DownloadThread extends Thread {
                     downThreadStream.seek(0);
                     downThreadStream.write((currentThreadPosition + "").getBytes("UTF-8"));
                 }
-                downThreadStream.close();
-                inputStream.close();
-                randomAccessFile.close();
                 //删除临时文件
 //                cleanTemp(downThreadFile);
                 System.out.println("线程" + threadId + "下载完毕");
@@ -144,6 +148,10 @@ public class DownloadThread extends Thread {
             if (callBack != null) {
                 callBack.onError(e);
             }
+        } finally {
+            CloseUtil.close(downThreadStream);
+            CloseUtil.close(inputStream);
+            CloseUtil.close(randomAccessFile);
         }
 
     }

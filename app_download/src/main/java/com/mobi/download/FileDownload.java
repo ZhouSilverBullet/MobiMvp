@@ -99,7 +99,7 @@ public class FileDownload implements Runnable, IFileDownloadCallback {
                 downloadThread.start();
                 downloadThreadList.add(downloadThread);
             }
-            randomAccessFile.close();
+            CloseUtil.close(randomAccessFile);
         }
     }
 
