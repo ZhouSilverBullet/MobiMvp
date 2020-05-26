@@ -220,5 +220,12 @@ public class FileDownload implements Runnable, IFileDownloadCallback {
         }
     }
 
+    public void pause() {
+        if (downloadThreadList != null) {
+            for (DownloadThread downloadThread : downloadThreadList) {
+                downloadThread.pause();
+            }
+        }
+    }
 }
 

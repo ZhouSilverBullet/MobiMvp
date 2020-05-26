@@ -2,6 +2,9 @@
     package="com.mobi.download" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!--  监听网络变化  -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 </manifest>

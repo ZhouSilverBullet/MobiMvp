@@ -113,6 +113,12 @@ public class DownloadThread extends Thread {
                 long total = 0L;
 
                 while ((length = inputStream.read(buffer)) > 0) {
+
+                    //暂停了
+                    if (isPause) {
+                        return;
+                    }
+
                     randomAccessFile.write(buffer, 0, length);
                     total += length;
                     if (callBack != null) {
@@ -219,6 +225,12 @@ public class DownloadThread extends Thread {
 
     public void setConnect(IFileConnect fileConnect) {
         this.fileConnect = fileConnect;
+    }
+
+    private boolean isPause;
+
+    public void pause() {
+        isPause = true;
     }
 }
 

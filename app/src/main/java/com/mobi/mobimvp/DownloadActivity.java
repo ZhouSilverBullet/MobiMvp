@@ -9,12 +9,9 @@ import android.widget.ProgressBar;
 
 import com.mobi.download.DownloadFileManager;
 import com.mobi.download.IDownloadFileCallBack;
-import com.mobi.download.IFileConnect;
-import com.mobi.download.IFileDownloadCallback;
 import com.mobi.mobimvp.download.OkhttpConnect;
 
 import java.io.File;
-import java.io.InputStream;
 
 public class DownloadActivity extends AppCompatActivity {
     public static final String PATH = "https://fga1.market.xiaomi.com/download/AppStore/0140049b1a5a4494e6bcb744f74ddab8c0d417de2/com.sdxxtop.zhidian.apk";
@@ -22,16 +19,19 @@ public class DownloadActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
     private Button btnStart;
+    private int downloadId;
+    private View btnStop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download);
 
-        DownloadFileManager.init(new OkhttpConnect());
+        DownloadFileManager.getInstance().init(new OkhttpConnect());
 
         progressBar = findViewById(R.id.pb);
         btnStart = findViewById(R.id.btnStart);
+        btnStop = findViewById(R.id.btnStop);
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,11 +39,18 @@ public class DownloadActivity extends AppCompatActivity {
                 download();
             }
         });
+
+        btnStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
     }
 
     private void download() {
         File cacheDir = getExternalCacheDir();
-        DownloadFileManager.download(PATH, cacheDir.getPath(), new IDownloadFileCallBack() {
+        DownloadFileManager.getInstance().download(PATH, cacheDir.getPath(), new IDownloadFileCallBack() {
             @Override
             public void onStart() {
                 Log.e(TAG, "onStart : " );
@@ -51,12 +58,12 @@ public class DownloadActivity extends AppCompatActivity {
 
             @Override
             public void onUpdateProgress(long progress) {
-                if (progress < 0) {
-                    progress = 0L;
-                }
-                if (progress >= 100) {
-                    progress = 100L;
-                }
+//                if (progress < 0) {
+//                    progress = 0L;
+//                }
+//                if (progress >= 100) {
+//                    progress = 100L;
+//                }
                 progressBar.setProgress((int) progress);
                 Log.e(TAG, "onUpdateProgress : " + progress);
             }
