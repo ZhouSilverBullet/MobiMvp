@@ -1,5 +1,7 @@
 package com.mobi.mobimvp.download;
 
+import android.support.annotation.WorkerThread;
+
 import com.mobi.download.IDownloadFileCallBack;
 import com.mobi.download.IFileConnect;
 import com.mobi.download.IFileDownloadCallback;
@@ -29,6 +31,7 @@ public class OkhttpConnect implements IFileConnect {
                 .build();
     }
 
+    @WorkerThread
     @Override
     public long getConnectionLength(String path, IDownloadFileCallBack callBack) {
         Request request = new Request.Builder()
@@ -47,6 +50,7 @@ public class OkhttpConnect implements IFileConnect {
         return 0L;
     }
 
+    @WorkerThread
     @Override
     public InputStream getInputStream(int threadId, String httpUrl, long startIndex, long endIndex, IFileDownloadCallback callBack) {
         Request request = new Request.Builder()

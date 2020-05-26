@@ -1,5 +1,7 @@
 package com.mobi.download;
 
+import android.support.annotation.WorkerThread;
+
 import java.io.InputStream;
 
 /**
@@ -16,6 +18,7 @@ public interface IFileConnect {
      * @param callBack
      * @return
      */
+    @WorkerThread
     long getConnectionLength(String path, IDownloadFileCallBack callBack);
 
     /**
@@ -27,6 +30,7 @@ public interface IFileConnect {
      * @param callBack
      * @return
      */
+    @WorkerThread
     InputStream getInputStream(int threadId, String httpUrl,
                                long startIndex, long endIndex,
                                IFileDownloadCallback callBack);

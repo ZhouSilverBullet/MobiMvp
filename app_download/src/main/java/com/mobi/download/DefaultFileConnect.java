@@ -1,6 +1,7 @@
 package com.mobi.download;
 
 import android.os.Build;
+import android.support.annotation.WorkerThread;
 
 import com.mobi.download.exception.FileDownloadException;
 
@@ -16,6 +17,7 @@ import java.net.URL;
  */
 public class DefaultFileConnect implements IFileConnect {
 
+    @WorkerThread
     @Override
     public long getConnectionLength(String path, IDownloadFileCallBack callBack) {
         //连接资源
@@ -46,6 +48,7 @@ public class DefaultFileConnect implements IFileConnect {
         return 0L;
     }
 
+    @WorkerThread
     @Override
     public InputStream getInputStream(int threadId, String httpUrl, long startIndex, long endIndex, IFileDownloadCallback callBack) {
         //分段请求网络连接,分段将文件保存到本地.
