@@ -1,9 +1,14 @@
 package com.mobi.download;
 
+import com.mobi.download.exception.FileDownloadException;
+
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -54,15 +59,13 @@ public class DownloadThread extends Thread {
         //用于文件缓存长度
         RandomAccessFile downThreadStream = null;
         //文件流
-        InputStream inputStream = null;
+        InputStream inputStream = getInputStream();
         //文件存储
         RandomAccessFile randomAccessFile = null;
 
         try {
-            //分段请求网络连接,分段将文件保存到本地.
-            URL url = new URL(httpUrl);
             //加载下载位置的文件
-            downThreadFile = new File(targetFilePath, FileUtil.getFileName(url) + "_downThread_" + threadId + ".dt");
+            downThreadFile = new File(targetFilePath, FileUtil.getFileName(httpUrl) + "_downThread_" + threadId + ".dt");
 
             //如果文件存在
             if (downThreadFile.exists()) {
@@ -82,10 +85,6 @@ public class DownloadThread extends Thread {
                 downThreadStream = new RandomAccessFile(downThreadFile, "rwd");
             }
 
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setConnectTimeout(10000);
-
             //证明已经下载完成
             if (startIndex >= endIndex) {
                 if (callBack != null) {
@@ -94,18 +93,11 @@ public class DownloadThread extends Thread {
                 return;
             }
 
-            //设置分段下载的头信息。  Range:做分段数据请求用的。格式: Range bytes=0-1024  或者 bytes:0-1024
-            connection.setRequestProperty("Range", "bytes=" + startIndex + "-" + endIndex);
-
-            System.out.println("线程_" + threadId + "的下载起点是 " + startIndex + "  下载终点是: " + endIndex);
-
             //200：请求全部资源成功， 206代表部分资源请求成功
-            if (connection.getResponseCode() == 206) {
-                //获取流
-                inputStream = connection.getInputStream();
+            if (inputStream != null) {
                 //获取前面已创建的文件.
                 randomAccessFile = new RandomAccessFile(
-                        new File(targetFilePath, FileUtil.getFileName(url)), "rw");
+                        new File(targetFilePath, FileUtil.getFileName(httpUrl)), "rw");
                 //文件写入的开始位置.
                 randomAccessFile.seek(startIndex);
 
@@ -136,11 +128,9 @@ public class DownloadThread extends Thread {
                     callBack.onFinished();
                 }
             } else {
-                System.out.println("响应码是" + connection.getResponseCode() + ". 服务器不支持多线程下载");
+                System.out.println("inputStream == null");
                 if (callBack != null) {
-                    IllegalAccessException e = new IllegalAccessException("响应码是" +
-                            connection.getResponseCode() + ". 服务器不支持多线程下载");
-                    callBack.onError(e);
+                    callBack.onError(new FileDownloadException("inputStream == null"));
                 }
             }
         } catch (Exception e) {
@@ -154,6 +144,45 @@ public class DownloadThread extends Thread {
             CloseUtil.close(randomAccessFile);
         }
 
+    }
+
+    /**
+     * 获取网络的InputStream
+     *
+     * @return
+     */
+    private InputStream getInputStream() {
+        //分段请求网络连接,分段将文件保存到本地.
+        try {
+            URL url = new URL(httpUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(10000);
+
+            //设置分段下载的头信息。  Range:做分段数据请求用的。格式: Range bytes=0-1024  或者 bytes:0-1024
+            connection.setRequestProperty("Range", "bytes=" + startIndex + "-" + endIndex);
+
+            System.out.println("线程_" + threadId + "的下载起点是 " + startIndex + "  下载终点是: " + endIndex);
+
+            //200：请求全部资源成功， 206代表部分资源请求成功
+            if (connection.getResponseCode() == 206) {
+                //获取流
+                return connection.getInputStream();
+            } else {
+                System.out.println("响应码是" + connection.getResponseCode() + ". 服务器不支持多线程下载");
+                if (callBack != null) {
+                    callBack.onError(new FileDownloadException("响应码是" + connection.getResponseCode() + ". 服务器不支持多线程下载"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            if (callBack != null) {
+                callBack.onError(e);
+            }
+        }
+
+        return null;
     }
 
     //删除线程产生的临时文件

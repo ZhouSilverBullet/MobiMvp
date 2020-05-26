@@ -1,6 +1,6 @@
 package com.mobi.download;
 
-import java.net.URL;
+import android.text.TextUtils;
 
 /**
  * Email: zhousaito@163.com
@@ -10,8 +10,10 @@ import java.net.URL;
  */
 class FileUtil {
     //获取下载文件的名称
-    public static String getFileName(URL url) {
-        String filename = url.getFile();
-        return filename.substring(filename.lastIndexOf("/") + 1);
+    public static String getFileName(String path) {
+        if (TextUtils.isEmpty(path)) {
+            return "1.apk";
+        }
+        return path.substring(path.lastIndexOf("/") + 1);
     }
 }

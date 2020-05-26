@@ -3,8 +3,11 @@ package com.mobi.download;
 import android.os.Build;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,48 +62,71 @@ public class FileDownload implements Runnable, IFileDownloadCallback {
         //开始
         onStart();
 
-        //连接资源
-        URL url = new URL(path);
+        connectionLength = getConnectionLength();
 
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        connection.setConnectTimeout(10000);
+        System.out.println(connectionLength);
 
-        int code = connection.getResponseCode();
-        if (code == 200) {
-            //获取资源大小
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                connectionLength = connection.getContentLengthLong();
-            } else {
-                connectionLength = connection.getContentLength();
+        //长度为0的时候，非法的长度
+        if (connectionLength == 0) {
+            if (callBack != null) {
+                IllegalStateException zero = new IllegalStateException("connect length by zero");
+                callBack.onError(path, zero);
             }
-
-            System.out.println(connectionLength);
-            //在本地创建一个与资源同样大小的文件来占位
-            RandomAccessFile randomAccessFile = new RandomAccessFile(new File(targetFilePath, FileUtil.getFileName(url)), "rw");
-            randomAccessFile.setLength(connectionLength);
-
-            //计算每个线程理论上下载的数量.
-            int blockSize = (int) (connectionLength / threadCount);
-            //为每个线程分配任务
-            //资源的总长度 为 0 - connectionLength - 1，计算机从0开始的，所以
-            for (int threadId = 0; threadId < threadCount; threadId++) {
-                //线程开始下载的位置
-                long startIndex = threadId * blockSize;
-                //线程结束下载的位置
-                long endIndex = (threadId + 1) * blockSize - 1;
-                //如果是最后一个线程,将剩下的文件全部交给这个线程完成
-                if (threadId == (threadCount - 1)) {
-                    endIndex = connectionLength - 1;
-                }
-                //开启线程下载
-                DownloadThread downloadThread = new DownloadThread(threadId, startIndex, endIndex,
-                        path, targetFilePath, this);
-                downloadThread.start();
-                downloadThreadList.add(downloadThread);
-            }
-            CloseUtil.close(randomAccessFile);
+            return;
         }
+
+        //在本地创建一个与资源同样大小的文件来占位
+        RandomAccessFile randomAccessFile = new RandomAccessFile(new File(targetFilePath, FileUtil.getFileName(path)), "rw");
+        randomAccessFile.setLength(connectionLength);
+
+        //计算每个线程理论上下载的数量.
+        int blockSize = (int) (connectionLength / threadCount);
+        //为每个线程分配任务
+        //资源的总长度 为 0 - connectionLength - 1，计算机从0开始的，所以
+        for (int threadId = 0; threadId < threadCount; threadId++) {
+            //线程开始下载的位置
+            long startIndex = threadId * blockSize;
+            //线程结束下载的位置
+            long endIndex = (threadId + 1) * blockSize - 1;
+            //如果是最后一个线程,将剩下的文件全部交给这个线程完成
+            if (threadId == (threadCount - 1)) {
+                endIndex = connectionLength - 1;
+            }
+            //开启线程下载
+            DownloadThread downloadThread = new DownloadThread(threadId, startIndex, endIndex,
+                    path, targetFilePath, this);
+            downloadThread.start();
+            downloadThreadList.add(downloadThread);
+        }
+        CloseUtil.close(randomAccessFile);
+    }
+
+    private long getConnectionLength() {
+        //连接资源
+        try {
+            URL url = new URL(path);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(10000);
+            int code = connection.getResponseCode();
+            if (code == 200) {
+                //获取资源大小
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    connectionLength = connection.getContentLengthLong();
+                } else {
+                    connectionLength = connection.getContentLength();
+                }
+                return connectionLength;
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return 0L;
     }
 
 
