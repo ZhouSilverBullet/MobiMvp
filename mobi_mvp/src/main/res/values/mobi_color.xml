@@ -2,4 +2,10 @@
 <resources>
     <color name="mobi_white">#FFFFFFFF</color>
     <color name="mobi_transparent">#00000000</color>
+
+    <color name="black_3d5c">#3D3F5C</color>
+    <color name="gray_f9f9">#F9F9F9</color>
+    <color name="gray_a7aa">#A7AACB</color>
+    <color name="gray_7e9c">#7E809C</color>
+    <color name="c_2C9DFF">#2C9DFF</color>
 </resources>

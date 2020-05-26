@@ -38,6 +38,9 @@ public class DownloadFileManager {
                          String targetFilePath,
                          int threadCount,
                          IDownloadFileCallBack callBack) {
+        if (!TextUtils.isEmpty(this.targetFilePath)) {
+            return;
+        }
         setParams(path, targetFilePath, threadCount, callBack);
 
         fileDownload = new FileDownload(path, targetFilePath, threadCount, fileConnect);
@@ -63,6 +66,11 @@ public class DownloadFileManager {
         if (fileDownload != null) {
             fileDownload.pause();
         }
+    }
+
+    public void release() {
+        path = null;
+        targetFilePath = null;
     }
 
     public void download(String path,
