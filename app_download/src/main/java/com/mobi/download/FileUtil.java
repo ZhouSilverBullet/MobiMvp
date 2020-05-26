@@ -8,7 +8,7 @@ import android.text.TextUtils;
  * Version: 1.0
  * Description:
  */
-class FileUtil {
+public class FileUtil {
     //获取下载文件的名称
     public static String getFileName(String path) {
         if (TextUtils.isEmpty(path)) {

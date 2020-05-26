@@ -1,6 +1,10 @@
 package com.mobi.download;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -78,6 +82,16 @@ public class FileDownload implements Runnable, IFileDownloadCallback {
             return;
         }
 
+        //是同一个文件
+        if (checkFile(connectionLength)) {
+            if (callBack != null) {
+                callBack.onUpdateProgress(100L);
+                callBack.onFinished(path);
+            }
+            return;
+        }
+
+
         //在本地创建一个与资源同样大小的文件来占位
         RandomAccessFile randomAccessFile = new RandomAccessFile(new File(targetFilePath, FileUtil.getFileName(path)), "rw");
         randomAccessFile.setLength(connectionLength);
@@ -103,6 +117,35 @@ public class FileDownload implements Runnable, IFileDownloadCallback {
             downloadThreadList.add(downloadThread);
         }
         CloseUtil.close(randomAccessFile);
+    }
+
+    private boolean checkFile(long contentLength) {
+        File file = new File(targetFilePath + "/" + FileUtil.getFileName(path));
+        if (file.exists()) {
+            if (file.length() == contentLength) {
+                boolean unintallApkInfo = getUnintallApkInfo(DownloadFileManager.getInstance().getContext(), file.getPath());
+                return unintallApkInfo;
+            }
+        }
+        return false;
+    }
+
+    public boolean getUnintallApkInfo(Context context, String filePath) {
+        if (context == null) {
+            return false;
+        }
+        boolean result = false;
+        try {
+            PackageManager pm = context.getPackageManager();
+            Log.e("archiveFilePath", filePath);
+            PackageInfo info = pm.getPackageArchiveInfo(filePath,PackageManager.GET_ACTIVITIES);
+            if (info != null) {
+                result = true;//完整
+            }
+        } catch (Exception e) {
+            result = false;//不完整
+        }
+        return result;
     }
 
     public long getConnectionLength(String path) {

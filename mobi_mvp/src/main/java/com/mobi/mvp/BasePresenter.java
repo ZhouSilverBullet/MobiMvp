@@ -32,6 +32,7 @@ public class BasePresenter<V extends IView> implements IPresenter<V>, LifecycleO
         if (mView != null) {
             mView = null;
         }
+
     }
 
     protected void showProgressDialog() {

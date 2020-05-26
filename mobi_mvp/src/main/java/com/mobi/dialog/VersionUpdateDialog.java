@@ -21,8 +21,10 @@ import android.widget.TextView;
 
 import com.mobi.R;
 import com.mobi.download.DownloadFileManager;
+import com.mobi.download.FileUtil;
 import com.mobi.download.IDownloadFileCallBack;
 import com.mobi.util.AppUtil;
+import com.mobi.util.ToastUtils;
 import com.mobi.util.UiUtils;
 
 import java.io.File;
@@ -164,8 +166,9 @@ public class VersionUpdateDialog extends BaseDialog implements View.OnClickListe
         if (!fileProgess.exists()) {
             fileProgess.mkdirs();
         }
+        DownloadFileManager.getInstance().setContext(getContext().getApplicationContext());
         DownloadFileManager.getInstance()
-                .download(downLoadUrl, fileProgess + "/" + FILENAME, new IDownloadFileCallBack() {
+                .download(downLoadUrl, fileProgess.getPath(), new IDownloadFileCallBack() {
                     @Override
                     public void onStart() {
                         Log.e(TAG, "开始下载");
@@ -188,7 +191,7 @@ public class VersionUpdateDialog extends BaseDialog implements View.OnClickListe
                             @Override
                             public void run() {
                                 Intent installIntent = new Intent(Intent.ACTION_VIEW);
-                                File file = new File(fileProgess + "/" + FILENAME + "/" + FILENAME);
+                                File file = new File(fileProgess + "/" + FileUtil.getFileName(path));
                                 installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                     installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -203,6 +206,25 @@ public class VersionUpdateDialog extends BaseDialog implements View.OnClickListe
                     @Override
                     public void onError(String path, Exception e) {
                         Log.e(TAG, e.getMessage());
+                        tv_progress.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtils.showLong(e.getMessage());
+                                if (isForce) {//强更
+                                    layout_update.setVisibility(View.GONE);
+                                    layout_update_force.setVisibility(View.VISIBLE);
+                                    layout_update_force.setOnClickListener(VersionUpdateDialog.this);
+                                } else {
+                                    layout_update.setVisibility(View.VISIBLE);
+                                    layout_update_force.setVisibility(View.GONE);
+                                    once_update.setOnClickListener(VersionUpdateDialog.this);
+                                    no_update.setOnClickListener(VersionUpdateDialog.this);
+                                }
+                                tv_progress.setVisibility(View.GONE);
+                                progress_bar.setVisibility(View.GONE);
+                            }
+                        });
+
                     }
                 });
 
@@ -217,7 +239,7 @@ public class VersionUpdateDialog extends BaseDialog implements View.OnClickListe
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 //            uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
-            uri = FileProvider.getUriForFile(context, "com.mobi"+ ".fileprovider", file);
+            uri = FileProvider.getUriForFile(context, "com.mobi" + ".fileprovider", file);
         } else {
             uri = Uri.fromFile(file);
         }

@@ -2,17 +2,11 @@ package com.mobi.mobimvp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.mobi.dialog.VersionUpdateDialog;
-import com.mobi.download.DownloadFileManager;
-import com.mobi.download.IDownloadFileCallBack;
-import com.mobi.mobimvp.download.OkhttpConnect;
-
-import java.io.File;
 
 public class DownloadActivity extends AppCompatActivity {
     public static final String PATH = "https://fga1.market.xiaomi.com/download/AppStore/0140049b1a5a4494e6bcb744f74ddab8c0d417de2/com.sdxxtop.zhidian.apk";
@@ -28,7 +22,7 @@ public class DownloadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download);
 
-        DownloadFileManager.getInstance().init(new OkhttpConnect());
+//        DownloadFileManager.getInstance().init(new OkhttpConnect());
 
         progressBar = findViewById(R.id.pb);
         btnStart = findViewById(R.id.btnStart);

@@ -54,10 +54,10 @@ public class ConnectReceiver extends BroadcastReceiver {
         if (available) {
             Toast.makeText(context, "当前网络可用", Toast.LENGTH_SHORT).show();
 //            DownloadFileManager.getInstance().startFileDownload();
-            DownloadFileManager.getInstance().startDownload();
+//            DownloadFileManager.getInstance().startDownload();
         } else {
             Toast.makeText(context, "当前网络不可用", Toast.LENGTH_SHORT).show();
-            DownloadFileManager.getInstance().pauseDownload();
+//            DownloadFileManager.getInstance().pauseDownload();
         }
         isAvailable = available;
 

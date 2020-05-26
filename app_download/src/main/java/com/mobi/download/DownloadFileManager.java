@@ -1,5 +1,6 @@
 package com.mobi.download;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 /**
@@ -16,6 +17,16 @@ public class DownloadFileManager {
     private String targetFilePath;
     private int threadCount;
     private IDownloadFileCallBack callBack;
+
+    private Context context;
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public Context getContext() {
+        return context;
+    }
 
     private DownloadFileManager() {
     }
@@ -38,9 +49,6 @@ public class DownloadFileManager {
                          String targetFilePath,
                          int threadCount,
                          IDownloadFileCallBack callBack) {
-        if (!TextUtils.isEmpty(this.targetFilePath)) {
-            return;
-        }
         setParams(path, targetFilePath, threadCount, callBack);
 
         fileDownload = new FileDownload(path, targetFilePath, threadCount, fileConnect);
