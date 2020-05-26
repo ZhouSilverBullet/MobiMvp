@@ -6,7 +6,7 @@ package com.mobi.download;
  * Version: 1.0
  * Description: 这个给 FileDownload实现
  */
-interface IFileDownloadCallback {
+public interface IFileDownloadCallback {
 
     /**
      * 进度条

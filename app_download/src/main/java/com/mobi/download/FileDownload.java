@@ -31,13 +31,14 @@ public class FileDownload implements Runnable, IFileDownloadCallback {
      * 清理temp文件
      */
     private List<DownloadThread> downloadThreadList;
+    private IFileConnect fileConnect;
 
     /**
      * @param path           要下载文件的网络路径
      * @param targetFilePath 保存下载文件的目录
      * @param threadCount    开启的线程数量,默认为 3
      */
-    public FileDownload(String path, String targetFilePath, int threadCount) {
+    public FileDownload(String path, String targetFilePath, int threadCount, IFileConnect connect) {
         this.path = path;
         this.targetFilePath = targetFilePath;
         this.threadCount = threadCount;
@@ -45,10 +46,12 @@ public class FileDownload implements Runnable, IFileDownloadCallback {
         progressAtc = new AtomicLong(0);
         threadRunningAtc = new AtomicInteger(threadCount);
         downloadThreadList = new ArrayList<>(threadCount);
+        //如果是null，就用默认的请求方式
+        this.fileConnect = connect == null ? new DefaultFileConnect() : connect;
     }
 
     public FileDownload(String path, String targetFilePath) {
-        this(path, targetFilePath, 3);
+        this(path, targetFilePath, 3, new DefaultFileConnect());
     }
 
     public void setCallBack(IDownloadFileCallBack callBack) {
@@ -62,7 +65,7 @@ public class FileDownload implements Runnable, IFileDownloadCallback {
         //开始
         onStart();
 
-        connectionLength = getConnectionLength();
+        connectionLength = fileConnect.getConnectionLength(path, callBack);
 
         System.out.println(connectionLength);
 
@@ -95,13 +98,14 @@ public class FileDownload implements Runnable, IFileDownloadCallback {
             //开启线程下载
             DownloadThread downloadThread = new DownloadThread(threadId, startIndex, endIndex,
                     path, targetFilePath, this);
+            downloadThread.setConnect(fileConnect);
             downloadThread.start();
             downloadThreadList.add(downloadThread);
         }
         CloseUtil.close(randomAccessFile);
     }
 
-    private long getConnectionLength() {
+    public long getConnectionLength(String path) {
         //连接资源
         try {
             URL url = new URL(path);
@@ -111,6 +115,7 @@ public class FileDownload implements Runnable, IFileDownloadCallback {
             int code = connection.getResponseCode();
             if (code == 200) {
                 //获取资源大小
+                long connectionLength;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     connectionLength = connection.getContentLengthLong();
                 } else {
@@ -177,7 +182,7 @@ public class FileDownload implements Runnable, IFileDownloadCallback {
             connectionLength = 1L;
         }
         long tempProgress = progressAtc.addAndGet(progress);
-        System.out.println("onUpdateProgress connectionLength : " + connectionLength + " tempProgress : " + tempProgress);
+//        System.out.println("DownloadThread onUpdateProgress : " + connectionLength + " tempProgress : " + tempProgress);
         tempProgress = tempProgress * 100 / connectionLength;
         if (callBack != null) {
             callBack.onUpdateProgress(tempProgress);

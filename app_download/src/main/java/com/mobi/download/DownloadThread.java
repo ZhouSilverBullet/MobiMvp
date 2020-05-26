@@ -28,6 +28,7 @@ public class DownloadThread extends Thread {
     private IFileDownloadCallback callBack;
     private long currentThreadTotal;//当前线程下载文件的总大小
     private File downThreadFile;
+    private IFileConnect fileConnect;
 
     /**
      * @param threadId   第几个线程 从0开始
@@ -54,12 +55,12 @@ public class DownloadThread extends Thread {
 
     @Override
     public void run() {
-        System.out.println("线程" + threadId + "开始下载");
+        System.out.println("DownloadThread 线程" + threadId + "开始下载");
 
         //用于文件缓存长度
         RandomAccessFile downThreadStream = null;
         //文件流
-        InputStream inputStream = getInputStream();
+        InputStream inputStream = null;
         //文件存储
         RandomAccessFile randomAccessFile = null;
 
@@ -69,7 +70,7 @@ public class DownloadThread extends Thread {
 
             //如果文件存在
             if (downThreadFile.exists()) {
-                downThreadStream = new RandomAccessFile(downThreadFile, "rwd");
+                downThreadStream = new RandomAccessFile(downThreadFile, "rw");
                 String startIndexStr = downThreadStream.readLine();
 
                 long lastStartIndex = Long.parseLong(startIndexStr);//设置下载起点
@@ -82,10 +83,14 @@ public class DownloadThread extends Thread {
                 //开始节点
                 this.startIndex = lastStartIndex;
             } else {
-                downThreadStream = new RandomAccessFile(downThreadFile, "rwd");
+                downThreadStream = new RandomAccessFile(downThreadFile, "rw");
             }
 
+            inputStream = fileConnect.getInputStream(threadId, httpUrl, startIndex, endIndex, callBack);
+
             //证明已经下载完成
+            System.err.println("DownloadThread startIndex " + threadId + " " + startIndex + " endIndex " + endIndex);
+
             if (startIndex >= endIndex) {
                 if (callBack != null) {
                     callBack.onFinished();
@@ -122,13 +127,13 @@ public class DownloadThread extends Thread {
                 }
                 //删除临时文件
 //                cleanTemp(downThreadFile);
-                System.out.println("线程" + threadId + "下载完毕");
+                System.out.println("DownloadThread 线程" + threadId + "下载完毕");
 
                 if (callBack != null) {
                     callBack.onFinished();
                 }
             } else {
-                System.out.println("inputStream == null");
+                System.out.println("DownloadThread inputStream == null");
                 if (callBack != null) {
                     callBack.onError(new FileDownloadException("inputStream == null"));
                 }
@@ -151,7 +156,9 @@ public class DownloadThread extends Thread {
      *
      * @return
      */
-    private InputStream getInputStream() {
+    private InputStream getInputStream(int threadId, String httpUrl,
+                                       long startIndex, long endIndex,
+                                       IFileDownloadCallback callBack) {
         //分段请求网络连接,分段将文件保存到本地.
         try {
             URL url = new URL(httpUrl);
@@ -162,14 +169,14 @@ public class DownloadThread extends Thread {
             //设置分段下载的头信息。  Range:做分段数据请求用的。格式: Range bytes=0-1024  或者 bytes:0-1024
             connection.setRequestProperty("Range", "bytes=" + startIndex + "-" + endIndex);
 
-            System.out.println("线程_" + threadId + "的下载起点是 " + startIndex + "  下载终点是: " + endIndex);
+            System.out.println("DownloadThread 线程_" + threadId + "的下载起点是 " + startIndex + "  下载终点是: " + endIndex);
 
             //200：请求全部资源成功， 206代表部分资源请求成功
             if (connection.getResponseCode() == 206) {
                 //获取流
                 return connection.getInputStream();
             } else {
-                System.out.println("响应码是" + connection.getResponseCode() + ". 服务器不支持多线程下载");
+                System.out.println("DownloadThread 响应码是" + connection.getResponseCode() + ". 服务器不支持多线程下载");
                 if (callBack != null) {
                     callBack.onError(new FileDownloadException("响应码是" + connection.getResponseCode() + ". 服务器不支持多线程下载"));
                 }
@@ -210,5 +217,8 @@ public class DownloadThread extends Thread {
         return httpUrl.startsWith("https");
     }
 
+    public void setConnect(IFileConnect fileConnect) {
+        this.fileConnect = fileConnect;
+    }
 }
 

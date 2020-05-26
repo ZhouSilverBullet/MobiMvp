@@ -9,8 +9,12 @@ import android.widget.ProgressBar;
 
 import com.mobi.download.DownloadFileManager;
 import com.mobi.download.IDownloadFileCallBack;
+import com.mobi.download.IFileConnect;
+import com.mobi.download.IFileDownloadCallback;
+import com.mobi.mobimvp.download.OkhttpConnect;
 
 import java.io.File;
+import java.io.InputStream;
 
 public class DownloadActivity extends AppCompatActivity {
     public static final String PATH = "https://fga1.market.xiaomi.com/download/AppStore/0140049b1a5a4494e6bcb744f74ddab8c0d417de2/com.sdxxtop.zhidian.apk";
@@ -23,6 +27,8 @@ public class DownloadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download);
+
+        DownloadFileManager.init(new OkhttpConnect());
 
         progressBar = findViewById(R.id.pb);
         btnStart = findViewById(R.id.btnStart);
