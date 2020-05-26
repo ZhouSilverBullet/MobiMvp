@@ -57,7 +57,7 @@ public class OkhttpConnect implements IFileConnect {
         try {
             Response response = client.newCall(request).execute();
             if (response.code() == 206) {
-                return  response.body().byteStream();
+                return response.body().byteStream();
             }
         } catch (IOException e) {
             e.printStackTrace();
