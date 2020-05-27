@@ -1,3 +1,4 @@
 rootProject.name='MobiMvp'
 include ':app', ':mobi_mvp'
 include ':app_download'
+include ':base'

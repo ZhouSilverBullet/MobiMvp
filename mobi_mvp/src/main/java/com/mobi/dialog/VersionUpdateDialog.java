@@ -176,9 +176,13 @@ public class VersionUpdateDialog extends BaseDialog implements View.OnClickListe
 
                     @Override
                     public void onUpdateProgress(long progress) {
+                        Log.e(TAG, "开始下载 progress " + progress);
                         tv_progress.post(new Runnable() {
                             @Override
                             public void run() {
+                                layout_progress.setVisibility(View.VISIBLE);
+                                progress_bar.setVisibility(View.VISIBLE);
+                                tv_progress.setVisibility(View.VISIBLE);
                                 tv_progress.setText(mContext.getString(R.string.updating) + "(" + (int) progress + "%)");
                                 progress_bar.setProgress((int) progress);
                             }

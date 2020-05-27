@@ -7,9 +7,11 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.mobi.dialog.VersionUpdateDialog;
+import com.mobi.download.DownloadFileManager;
+import com.mobi.mobimvp.download.OkhttpConnect;
 
 public class DownloadActivity extends AppCompatActivity {
-    public static final String PATH = "https://fga1.market.xiaomi.com/download/AppStore/0140049b1a5a4494e6bcb744f74ddab8c0d417de2/com.sdxxtop.zhidian.apk";
+    public static final String PATH = "https://dldir1.qq.com/weixin/android/weixin7014android1660.apk";
     public static final String TAG = "DownloadActivity";
 
     private ProgressBar progressBar;
@@ -22,7 +24,7 @@ public class DownloadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download);
 
-//        DownloadFileManager.getInstance().init(new OkhttpConnect());
+        DownloadFileManager.getInstance().init(new OkhttpConnect());
 
         progressBar = findViewById(R.id.pb);
         btnStart = findViewById(R.id.btnStart);

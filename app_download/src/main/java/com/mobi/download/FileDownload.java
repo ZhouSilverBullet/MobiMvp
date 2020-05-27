@@ -225,7 +225,7 @@ public class FileDownload implements Runnable, IFileDownloadCallback {
             connectionLength = 1L;
         }
         long tempProgress = progressAtc.addAndGet(progress);
-//        System.out.println("DownloadThread onUpdateProgress : " + connectionLength + " tempProgress : " + tempProgress);
+        System.out.println("DownloadThread onUpdateProgress : " + connectionLength + " tempProgress : " + tempProgress);
         tempProgress = tempProgress * 100 / connectionLength;
         if (callBack != null) {
             callBack.onUpdateProgress(tempProgress);
