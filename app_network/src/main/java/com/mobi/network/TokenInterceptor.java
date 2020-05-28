@@ -60,8 +60,6 @@ public class TokenInterceptor implements Interceptor {
             e.printStackTrace();
         }
 
-        //response.body().string() 只能被使用一次
-        //https://www.jianshu.com/p/22cd955cf111
         return response.newBuilder()
                 .body(ResponseBody.create(null, string))
                 .code(200)
