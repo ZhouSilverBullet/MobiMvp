@@ -23,6 +23,23 @@ import okhttp3.ResponseBody;
 public class TokenInterceptor implements Interceptor {
     private static final String TAG = "TokenInterceptor";
 
+    private final String refreshTokenUrl;
+
+    //建议传递一个tokenUrl
+    @Deprecated
+    public TokenInterceptor() {
+        this(null);
+    }
+
+    public TokenInterceptor(String refreshTokenUrl) {
+        if (TextUtils.isEmpty(refreshTokenUrl)) {
+            //默认值
+            this.refreshTokenUrl = "all-walking/v1/user/login";
+        } else {
+            this.refreshTokenUrl = refreshTokenUrl;
+        }
+    }
+
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
@@ -80,7 +97,7 @@ public class TokenInterceptor implements Interceptor {
         String token = null;
         retrofit2.Response<BaseResponse<TokenBean>> response = DefaultRetrofitClient.getInstance()
                 .getHttpApi()
-                .refreshToken(NetworkSession.get().getNetworkConfig().getTokenUrl())
+                .refreshToken(refreshTokenUrl)
                 .execute();
         BaseResponse<TokenBean> body = response.body();
         if (body != null) {
