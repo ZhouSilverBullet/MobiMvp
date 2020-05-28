@@ -1,5 +1,7 @@
 package com.mobi.feature;
 
+import android.support.annotation.Nullable;
+
 /**
  * @author zhousaito
  * @version 1.0
@@ -14,4 +16,6 @@ public interface INetworkCallback {
     String getToken();
 
     String getDeviceId();
+
+    void refreshToken(@Nullable String newToken);
 }

@@ -35,13 +35,21 @@ public abstract class BaseOkhttpDalegate {
     public final static int READ_TIMEOUT = 50000;
     public final static int WRITE_TIMEOUT = 50000;
 
+    //通过静态变量持有，其他类为BaseOkhttpDalegate子类的时候
+    //共享这个一个OkhttpClient
+    protected static OkHttpClient sOkHttpClient;
     protected OkHttpClient mOkHttpClient;
+
     protected Retrofit mConfigRetrofit;
     protected Retrofit mRetrofit;
 
 
     public BaseOkhttpDalegate() {
-        mOkHttpClient = getOkHttpClient();
+        if (sOkHttpClient == null) {
+            sOkHttpClient = getOkHttpClient();
+        }
+        //重新获取一个共享的OkhttpClient
+        mOkHttpClient = sOkHttpClient;
     }
 
     protected abstract void initConfigApi();
@@ -95,7 +103,6 @@ public abstract class BaseOkhttpDalegate {
     }
 
     private void handleBuilder(OkHttpClient.Builder builder) {
-
 
         //分发器
         Dispatcher dispatcher = NetworkSession.get().getNetworkConfig().getDispatcher();

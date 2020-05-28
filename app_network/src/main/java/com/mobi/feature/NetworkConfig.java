@@ -55,6 +55,8 @@ public class NetworkConfig {
     private String baseConfigUrl;
     private String baseUrl;
 
+    private String tokenUrl;
+
     private String mac;
     private String androidId;
     private String imei;
@@ -104,6 +106,13 @@ public class NetworkConfig {
         }
 
         this.networkCallback = builder.networkUrl;
+
+        //处理tokenUrl
+        if (!TextUtils.isEmpty(tokenUrl)) {
+            this.tokenUrl = builder.refreshTokenUrl;
+        } else {
+            this.tokenUrl = "all-walking/v1/user/login";
+        }
     }
 
     public SSLSocketFactory getSslSocketFactory() {
@@ -160,6 +169,16 @@ public class NetworkConfig {
         return token;
     }
 
+    public void setNewToken(@NonNull String newToken) {
+        if (networkCallback != null) {
+            networkCallback.refreshToken(newToken);
+        }
+    }
+
+    public String getTokenUrl() {
+        return tokenUrl;
+    }
+
     public String getImei() {
         if (TextUtils.isEmpty(imei)) {
             imei = AppUtil.getIMEI();
@@ -203,6 +222,8 @@ public class NetworkConfig {
         INetworkCallback networkUrl;
 
         Interceptor loggingInterceptor;
+
+        String refreshTokenUrl;
 
 
         public Builder setSslSocketFactory(@Nullable SSLSocketFactory sslSocketFactory) {
@@ -248,6 +269,11 @@ public class NetworkConfig {
 
         public Builder setLoggingInterceptor(@Nullable Interceptor loggingInterceptor) {
             this.loggingInterceptor = loggingInterceptor;
+            return this;
+        }
+
+        public Builder setRefreshTokenUrl(String refreshTokenUrl) {
+            this.refreshTokenUrl = refreshTokenUrl;
             return this;
         }
 
