@@ -2,7 +2,7 @@ package com.mobi.mobimvp
 
 import com.mobi.base.BaseMvpActivity
 import com.mobi.mobimvp.presenter.TestPresenter
-import com.mobi.util.LogUtils
+import com.mobi.util.LogMvpUtils
 import kotlinx.android.synthetic.main.activity_test.*
 
 class TestActivity : BaseMvpActivity<TestPresenter>() {
@@ -25,17 +25,17 @@ class TestActivity : BaseMvpActivity<TestPresenter>() {
 
     override fun onResume() {
         super.onResume()
-        LogUtils.i(TAG, "activity onResume")
+        LogMvpUtils.i(TAG, "activity onResume")
     }
 
 
     override fun onPause() {
         super.onPause()
-        LogUtils.i(TAG, "activity onPause")
+        LogMvpUtils.i(TAG, "activity onPause")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        LogUtils.i(TAG, "activity onDestroy")
+        LogMvpUtils.i(TAG, "activity onDestroy")
     }
 }

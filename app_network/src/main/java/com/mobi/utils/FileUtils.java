@@ -1,4 +1,4 @@
-package com.mobi.util;
+package com.mobi.utils;
 
 import java.io.File;
 

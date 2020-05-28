@@ -1,16 +1,16 @@
-package com.mobi.util;
+package com.mobi.utils;
 
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.mobi.global.MobiSession;
+import com.mobi.NetworkSession;
 
 /**
  * 作者: zhousaito
  * 日期: 2019/5/18
  */
 public class LogUtils {
-    static String log_mobi = "log_mobi";
+    static String log_mobi = "XLOG=";
 
     //for error log
     public static void error(String msg) {
@@ -189,6 +189,6 @@ public class LogUtils {
     }
 
     private static boolean isDebug() {
-        return MobiSession.getInstance().isDebug();
+        return NetworkSession.isDebug();
     }
 }

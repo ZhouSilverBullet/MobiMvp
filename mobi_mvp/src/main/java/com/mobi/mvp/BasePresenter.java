@@ -6,7 +6,7 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.annotation.Nullable;
 
 import com.mobi.dialog.LoadingDialog;
-import com.mobi.util.LogUtils;
+import com.mobi.util.LogMvpUtils;
 
 /**
  * @author zhousaito
@@ -64,7 +64,7 @@ public class BasePresenter<V extends IView> implements IPresenter<V>, LifecycleO
     /// 下面生命周期，经过测试，比activity的对应的是先调用的 ///
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onCreate() {
-        LogUtils.i(TAG, "-- onCreate --");
+        LogMvpUtils.i(TAG, "-- onCreate --");
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)

@@ -23,9 +23,9 @@ import com.mobi.R;
 import com.mobi.download.DownloadFileManager;
 import com.mobi.download.FileUtil;
 import com.mobi.download.IDownloadFileCallBack;
-import com.mobi.util.AppUtil;
 import com.mobi.util.ToastUtils;
 import com.mobi.util.UiUtils;
+import com.mobi.util.VersionUpdateUtil;
 
 import java.io.File;
 
@@ -94,7 +94,7 @@ public class VersionUpdateDialog extends BaseDialog implements View.OnClickListe
             version_name.setText(mContext.getString(R.string.find_new, versionName));
         }
         if (!TextUtils.isEmpty(versionContent)) {
-            String[] description = AppUtil.splitPTag(versionContent);
+            String[] description = VersionUpdateUtil.splitPTag(versionContent);
             for (int i = 0; i < description.length; i++) {
                 buildTextView(layout_content, description[i]);
             }

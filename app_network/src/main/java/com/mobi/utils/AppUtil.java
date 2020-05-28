@@ -1,5 +1,7 @@
-package com.mobi.util;
+package com.mobi.utils;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ClipData;
@@ -17,6 +19,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.telephony.TelephonyManager;
 import android.text.SpannableString;
@@ -26,7 +30,7 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.TypedValue;
 
-import com.mobi.global.MobiSession;
+import com.mobi.NetworkSession;
 
 import java.io.File;
 import java.security.MessageDigest;
@@ -35,6 +39,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static android.content.Context.TELEPHONY_SERVICE;
 
 /**
  * author : liangning
@@ -191,7 +197,7 @@ public class AppUtil {
      * @return
      */
     public static String getNetworkTypeName() {
-        ConnectivityManager ConnectivityManager = (ConnectivityManager) MobiSession.getInstance().getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager ConnectivityManager = (ConnectivityManager) NetworkSession.get().getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = ConnectivityManager.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isAvailable()) {
@@ -212,7 +218,7 @@ public class AppUtil {
      * @return
      */
     public static String getSimOperatorInfo() {
-        TelephonyManager telephonyManager = (TelephonyManager) MobiSession.getInstance().getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager telephonyManager = (TelephonyManager) NetworkSession.get().getContext().getSystemService(Context.TELEPHONY_SERVICE);
         String operatorString = telephonyManager.getSimOperator();
 
         if (operatorString == null) {
@@ -313,8 +319,6 @@ public class AppUtil {
         return s;
     }
 
-
-   
 
     // return x, x px = v dp
     public static int dpToPx(float v) {
@@ -503,6 +507,59 @@ public class AppUtil {
             string.setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return string;
+    }
+
+    /**
+     * 获取IMEI 没有权限则返回默认值 ""
+     *
+     * @param
+     * @return
+     */
+    @SuppressLint("HardwareIds")
+    public static String getIMEI() {
+        Context context = NetworkSession.get().getContext();
+        String imei = "";
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            //没有获取到权限
+            imei = "";
+        } else {
+            TelephonyManager tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (tm.getDeviceId() != null) {
+                imei = tm.getDeviceId();
+            } else {
+                imei = Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+            }
+        }
+        return TextUtils.isEmpty(imei) ? "" : imei;
+    }
+
+    /**
+     * 获取mac 没有权限则返回默认值 ""
+     *
+     * @param
+     * @return
+     */
+    public static String getMac() {
+        Context context = NetworkSession.get().getContext();
+        String mac = GetDeviceId.getLocalMac(context).replace(":", "");
+        return TextUtils.isEmpty(mac) ? "" : mac;
+    }
+
+
+    /**
+     * 获取androidID 没有权限则返回默认值 ""
+     *
+     * @param
+     * @return
+     */
+    @SuppressLint("HardwareIds")
+    public static String getAndroidID() {
+        Context context = NetworkSession.get().getContext();
+        String android_id = Settings.Secure.getString(
+                context.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
+        return TextUtils.isEmpty(android_id) ? "" : android_id;
     }
 
 }
