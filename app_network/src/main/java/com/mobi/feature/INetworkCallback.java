@@ -12,4 +12,6 @@ public interface INetworkCallback {
     String getBaseUrl();
 
     String getToken();
+
+    String getDeviceId();
 }

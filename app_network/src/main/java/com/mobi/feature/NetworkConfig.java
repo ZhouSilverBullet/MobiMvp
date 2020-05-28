@@ -184,6 +184,9 @@ public class NetworkConfig {
     public String getDeviceId() {
         if (TextUtils.isEmpty(deviceId)) {
             deviceId = SpNetworkUtil.getString(NetworkConst.KEY_DEVICE_ID);
+            if (networkCallback != null && TextUtils.isEmpty(deviceId)) {
+                deviceId = networkCallback.getDeviceId();
+            }
         }
         return deviceId;
     }
