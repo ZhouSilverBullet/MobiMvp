@@ -3,13 +3,14 @@ package com.mobi.base;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mobi.dialog.LoadingDialog;
+import com.mobi.permission.RxPermissions;
 import com.mobi.util.ToastUtils;
-import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -21,12 +22,13 @@ import butterknife.Unbinder;
  * 描述：视图控制基类
  */
 
-public abstract class BaseFragment extends RxFragment {
+public abstract class BaseFragment extends Fragment {
 
     private Unbinder mUnbinder;
     protected LoadingDialog mLoadingDialog;
     protected View mRootView;
     protected Context mContext;
+    private RxPermissions mRxPermissions;
 
     @Override
     public void onAttach(Context context) {
@@ -90,6 +92,18 @@ public abstract class BaseFragment extends RxFragment {
         mUnbinder = null;
 
 //        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 获取权限
+     *
+     * @return
+     */
+    public RxPermissions getRxPermissions() {
+        if (mRxPermissions == null) {
+            mRxPermissions = new RxPermissions(this);
+        }
+        return mRxPermissions;
     }
 
     /**

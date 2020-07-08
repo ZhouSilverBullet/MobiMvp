@@ -5,12 +5,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.mobi.dialog.LoadingDialog;
+import com.mobi.permission.RxPermissions;
 import com.mobi.util.StatusBarPaddingUtil;
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -21,10 +22,11 @@ import butterknife.Unbinder;
  * @date 2020/5/18 14:54
  * @Dec 略
  */
-public abstract class BaseActivity extends RxAppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     //butterKnife 绑定
     private Unbinder bind;
     private LoadingDialog mLoadingDialog;
+    private RxPermissions mRxPermissions;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,6 +124,17 @@ public abstract class BaseActivity extends RxAppCompatActivity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+    }
+
+    /**
+     * 获取权限申请
+     * @return
+     */
+    public RxPermissions getRxPermissions() {
+        if (mRxPermissions == null) {
+            mRxPermissions = new RxPermissions(this);
+        }
+        return mRxPermissions;
     }
 
     public void setDarkStatusIcon(boolean bDark) {

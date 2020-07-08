@@ -42,13 +42,14 @@ dependencies {
     api "com.squareup.okhttp3:okhttp:${okhttp3}"
     api "com.squareup.okhttp3:logging-interceptor:${okhttp3}"
 
-    api "com.trello.rxlifecycle2:rxlifecycle:${rxlifecycle2}"
-    api "com.trello.rxlifecycle2:rxlifecycle-android:${rxlifecycle2}"
-    api "com.trello.rxlifecycle2:rxlifecycle-components:${rxlifecycle2}"
+//    api "com.trello.rxlifecycle2:rxlifecycle:${rxlifecycle2}"
+//    api "com.trello.rxlifecycle2:rxlifecycle-android:${rxlifecycle2}"
+//    api "com.trello.rxlifecycle2:rxlifecycle-components:${rxlifecycle2}"
 
     implementation "com.jakewharton:butterknife:${butterknife}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknife}"
 
+//    api "com.github.tbruyelle:rxpermissions:${rxpermissions}"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

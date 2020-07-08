@@ -8,7 +8,7 @@ import com.mobi.network.entity.TokenBean;
  * @date 2020/5/28 11:56
  * @Dec 略
  */
-final class DefaultRetrofitClient extends BaseRetrofitClient<NetworkApi> {
+public final class DefaultRetrofitClient extends BaseRetrofitClient<NetworkApi> {
 
     private DefaultRetrofitClient() {
     }

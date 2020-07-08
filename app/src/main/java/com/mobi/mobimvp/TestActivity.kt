@@ -1,8 +1,10 @@
 package com.mobi.mobimvp
 
+import android.Manifest
 import com.mobi.base.BaseMvpActivity
 import com.mobi.mobimvp.presenter.TestPresenter
 import com.mobi.util.LogMvpUtils
+import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.activity_test.*
 
 class TestActivity : BaseMvpActivity<TestPresenter>() {
@@ -14,6 +16,13 @@ class TestActivity : BaseMvpActivity<TestPresenter>() {
 
     override fun getLayoutId(): Int {
        return R.layout.activity_test
+    }
+
+    override fun initView() {
+        rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            .subscribe {
+
+            }
     }
 
     override fun initEvent() {

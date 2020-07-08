@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 28
     buildToolsVersion "29.0.3"
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 29
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
@@ -19,6 +19,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 
 }
@@ -36,6 +40,10 @@ dependencies {
     api "com.squareup.retrofit2:converter-gson:${retrofit}"
     api "com.squareup.okhttp3:okhttp:${okhttp3}"
     api "com.squareup.okhttp3:logging-interceptor:${okhttp3}"
+
+    api "com.trello.rxlifecycle2:rxlifecycle:${rxlifecycle2}"
+    api "com.trello.rxlifecycle2:rxlifecycle-android:${rxlifecycle2}"
+    api "com.trello.rxlifecycle2:rxlifecycle-components:${rxlifecycle2}"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
