@@ -1,12 +1,7 @@
 package com.mobi.network;
 
-import android.content.Context;
-
 import com.mobi.network.callback.IRequestCallback;
 import com.mobi.network.exception.ApiException;
-import com.trello.rxlifecycle2.android.ActivityEvent;
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
-import com.trello.rxlifecycle2.components.support.RxFragmentActivity;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -40,7 +35,7 @@ public class CommonSchedulers {
         };
     }
 
-    private static Consumer<Throwable> throwableConsumer(final IRequestCallback requestCallback) {
+    private static <D> Consumer<Throwable> throwableConsumer(final IRequestCallback<D> requestCallback) {
         return new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
@@ -64,29 +59,5 @@ public class CommonSchedulers {
             }
         };
     }
-
-
-
-    public static <T> ObservableTransformer<T, T> observableIO2Main(final Context context) {
-        return new ObservableTransformer<T, T>() {
-            @Override
-            public ObservableSource<T> apply(Observable<T> upstream) {
-                Observable<T> observable = upstream.subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread());
-                return composeContext(context, observable);
-            }
-        };
-    }
-
-    private static <T> ObservableSource<T> composeContext(Context context, Observable<T> observable) {
-        if (context instanceof RxFragmentActivity) {
-            return (ObservableSource<T>) observable.compose(((RxFragmentActivity) context).bindUntilEvent(ActivityEvent.DESTROY));
-        } else if (context instanceof RxAppCompatActivity) {
-            return (ObservableSource<T>) observable.compose(((RxAppCompatActivity) context).bindUntilEvent(ActivityEvent.DESTROY));
-        } else {
-            return observable;
-        }
-    }
-
 
 }
