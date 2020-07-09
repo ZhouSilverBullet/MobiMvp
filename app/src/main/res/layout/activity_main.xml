@@ -9,13 +9,24 @@
 
     <Button
         android:id="@+id/btnSkipTest"
-        android:text="测试一下生命周期"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="测试一下生命周期" />
 
     <Button
         android:id="@+id/btnSkipDownload"
-        android:text="测试下载apk"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="测试下载apk" />
+
+    <Button
+        android:id="@+id/btnSkipImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="图片显示" />
+
+    <ImageView
+        android:id="@+id/ivLoad"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </LinearLayout>

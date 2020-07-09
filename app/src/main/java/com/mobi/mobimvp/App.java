@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.mobi.download.receiver.ConnectReceiver;
 import com.mobi.global.MobiSession;
+import com.mobi.thrid.images.loader.ImageLoader;
 
 /**
  * @author zhousaito
@@ -17,5 +18,6 @@ public class App extends Application {
         super.onCreate();
         ConnectReceiver.start(this);
         MobiSession.getInstance().init(this);
+        ImageLoader.init(this);
     }
 }

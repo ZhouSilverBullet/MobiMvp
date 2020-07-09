@@ -45,6 +45,7 @@ dependencies {
 //    api "com.squareup.okhttp3:logging-interceptor:${okhttp3}"
 
     implementation 'com.mindorks.android:prdownloader:0.6.0'
+    implementation project(path: ':app_thrid')
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

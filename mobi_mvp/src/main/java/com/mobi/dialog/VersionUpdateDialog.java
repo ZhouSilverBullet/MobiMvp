@@ -243,7 +243,7 @@ public class VersionUpdateDialog extends BaseDialog implements View.OnClickListe
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 //            uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
-            uri = FileProvider.getUriForFile(context, "com.mobi" + ".fileprovider", file);
+            uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
         } else {
             uri = Uri.fromFile(file);
         }
