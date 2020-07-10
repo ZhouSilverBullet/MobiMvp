@@ -44,5 +44,6 @@ class ImageActivity : BaseActivity() {
             .sketchFilter()
             .into(ivLoad4)
 
+        loadService.showSuccess()
     }
 }

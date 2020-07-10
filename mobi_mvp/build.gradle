@@ -46,6 +46,8 @@ dependencies {
 //    api "com.trello.rxlifecycle2:rxlifecycle-android:${rxlifecycle2}"
 //    api "com.trello.rxlifecycle2:rxlifecycle-components:${rxlifecycle2}"
 
+    api "com.kingja.loadsir:loadsir:${loadsir}"
+
     implementation "com.jakewharton:butterknife:${butterknife}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknife}"
 

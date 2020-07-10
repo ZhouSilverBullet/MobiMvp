@@ -2,6 +2,13 @@ package com.mobi.global;
 
 import android.content.Context;
 
+import com.kingja.loadsir.core.LoadSir;
+import com.mobi.loadsir.CustomCallback;
+import com.mobi.loadsir.EmptyCallback;
+import com.mobi.loadsir.ErrorCallback;
+import com.mobi.loadsir.LoadingCallback;
+import com.mobi.loadsir.TimeoutCallback;
+
 /**
  * @author zhousaito
  * @version 1.0
@@ -31,6 +38,15 @@ public class MobiSession {
         mContext = context.getApplicationContext();
         //捕获异常
         CrashHandler.getInstance().init(mContext);
+
+        LoadSir.beginBuilder()
+                .addCallback(new ErrorCallback())//添加各种状态页
+                .addCallback(new EmptyCallback())
+                .addCallback(new LoadingCallback())
+                .addCallback(new TimeoutCallback())
+                .addCallback(new CustomCallback())
+                .setDefaultCallback(LoadingCallback.class)//设置默认状态页
+                .commit();
     }
 
     public boolean isDebug() {

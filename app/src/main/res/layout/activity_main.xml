@@ -25,6 +25,12 @@
         android:layout_height="wrap_content"
         android:text="图片显示" />
 
+    <Button
+        android:id="@+id/btnSkipLoad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="跳转加载" />
+
     <ImageView
         android:id="@+id/ivLoad"
         android:layout_width="wrap_content"

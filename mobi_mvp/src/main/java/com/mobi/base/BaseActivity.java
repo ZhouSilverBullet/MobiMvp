@@ -6,10 +6,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.kingja.loadsir.callback.Callback;
+import com.kingja.loadsir.core.LoadService;
+import com.kingja.loadsir.core.LoadSir;
 import com.mobi.dialog.LoadingDialog;
+import com.mobi.feature.ILoadSirDelegate;
 import com.mobi.permission.RxPermissions;
 import com.mobi.util.StatusBarPaddingUtil;
 
@@ -22,11 +27,12 @@ import butterknife.Unbinder;
  * @date 2020/5/18 14:54
  * @Dec 略
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements ILoadSirDelegate {
     //butterKnife 绑定
     private Unbinder bind;
     private LoadingDialog mLoadingDialog;
     private RxPermissions mRxPermissions;
+    private LoadService mLoadService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +49,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         bind = ButterKnife.bind(this);
 
+        loadSir();
+
         if (getIntent() != null) {
             initVariables(getIntent());
         }
@@ -51,6 +59,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         initView(savedInstanceState);
         initEvent();
         initData();
+    }
+
+    private void loadSir() {
+        mLoadService = LoadSir.getDefault().register(this, (Callback.OnReloadListener) v -> {
+            // 重新加载逻辑
+            preLoad();
+        });
+    }
+
+    public LoadService getLoadService() {
+        return mLoadService;
     }
 
     @Override
@@ -96,6 +115,17 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void initEvent() {
 
+    }
+
+    @Override
+    public void preLoad() {
+
+    }
+
+    @Nullable
+    @Override
+    public View loadSirBindView() {
+        return null;
     }
 
     @Override

@@ -3,12 +3,18 @@ package com.mobi.base;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.kingja.loadsir.callback.Callback;
+import com.kingja.loadsir.core.LoadService;
+import com.kingja.loadsir.core.LoadSir;
 import com.mobi.dialog.LoadingDialog;
+import com.mobi.feature.ILoadSirDelegate;
+import com.mobi.loadsir.LoaderSirUtil;
 import com.mobi.permission.RxPermissions;
 import com.mobi.util.ToastUtils;
 
@@ -22,13 +28,14 @@ import butterknife.Unbinder;
  * 描述：视图控制基类
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements ILoadSirDelegate {
 
     private Unbinder mUnbinder;
     protected LoadingDialog mLoadingDialog;
     protected View mRootView;
     protected Context mContext;
     private RxPermissions mRxPermissions;
+    private LoadService mLoadService;
 
     @Override
     public void onAttach(Context context) {
@@ -38,7 +45,25 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = loadSirBindView();
         mRootView = inflater.inflate(getFragmentView(), container, false);
+        if (view == null) {
+            mLoadService = LoadSir.getDefault().register(mRootView.getRootView(), new Callback.OnReloadListener() {
+                @Override
+                public void onReload(View v) {
+                    preLoad();
+                }
+            });
+        } else {
+            //view不为空表示子类想自己去实现LoadSir,一般出现在有title的情况
+            //当有title的情况，方便子类 自己显现一个title类型的loadSir
+            mLoadService = LoadSir.getDefault().register(view, new Callback.OnReloadListener() {
+                @Override
+                public void onReload(View v) {
+                    preLoad();
+                }
+            });
+        }
         mUnbinder = ButterKnife.bind(this, mRootView);
         return mRootView.getRootView();
     }
@@ -82,6 +107,20 @@ public abstract class BaseFragment extends Fragment {
     protected void initEvent() {
     }
 
+    public LoadService getLoadService() {
+        return mLoadService;
+    }
+
+    @Override
+    public void preLoad() {
+
+    }
+
+    @Nullable
+    @Override
+    public View loadSirBindView() {
+        return null;
+    }
 
     @Override
     public void onDestroyView() {

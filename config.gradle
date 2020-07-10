@@ -19,4 +19,5 @@ ext {
     supportV7 = "28.0.0"
 
     butterknife = "8.8.0"
+    loadsir = "1.3.0"
 }

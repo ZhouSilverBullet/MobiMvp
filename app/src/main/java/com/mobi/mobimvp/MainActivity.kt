@@ -29,6 +29,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, ImageActivity::class.java))
         }
 
+        btnSkipLoad.setOnClickListener {
+            startActivity(Intent(this, LoadActivity::class.java))
+        }
+
 //        ImageLoader.load(this, "https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2597615846,3725603705&fm=26&gp=0.jpg", ivLoad)
 //        ImageLoader.with(this)
 //            .asCircle()
