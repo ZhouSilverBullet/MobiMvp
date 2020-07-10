@@ -25,7 +25,7 @@ public class LoadingSpinView extends AppCompatImageView {
 
         int[] loadingSpinViews = ResourceUtil.getResourceDeclareStyleableIntArray("LoadingSpinView");
         TypedArray a = getResources().obtainAttributes(attrs, loadingSpinViews);
-        drawable = a.getDrawable(ResourceUtil.getStyleableIntArrayIndex("LoadingSpinView_lsv_loadSrc"));
+        drawable = a.getDrawable(ResourceUtil.getStyleable("LoadingSpinView_lsv_loadSrc"));
         a.recycle();
 
         this.init();
