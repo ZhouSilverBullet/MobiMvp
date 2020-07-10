@@ -19,10 +19,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mobi.R;
 import com.mobi.download.DownloadFileManager;
 import com.mobi.download.FileUtil;
 import com.mobi.download.IDownloadFileCallBack;
+import com.mobi.util.ResourceUtil;
 import com.mobi.util.ToastUtils;
 import com.mobi.util.UiUtils;
 import com.mobi.util.VersionUpdateUtil;
@@ -73,25 +73,26 @@ public class VersionUpdateDialog extends BaseDialog implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_update_version_layout);
+        setContentView(ResourceUtil.getIdentifierLayout("dialog_update_version_layout"));
         initView();
         initWindow();
     }
 
     private void initView() {
-        version_name = findViewById(R.id.version_name);
-        layout_content = findViewById(R.id.content_layout);
-        layout_update_force = findViewById(R.id.layout_update_force);
-        once_update_force = findViewById(R.id.once_update_force);
-        layout_update = findViewById(R.id.layout_update);
-        no_update = findViewById(R.id.no_update);
-        once_update = findViewById(R.id.once_update);
-        layout_progress = findViewById(R.id.layout_progress);
-        progress_bar = findViewById(R.id.progress_bar);
-        tv_progress = findViewById(R.id.tv_progress);
+
+        version_name = findViewById(ResourceUtil.getIdentifierId("version_name"));
+        layout_content = findViewById(ResourceUtil.getIdentifierId("content_layout"));
+        layout_update_force = findViewById(ResourceUtil.getIdentifierId("layout_update_force"));
+        once_update_force = findViewById(ResourceUtil.getIdentifierId("once_update_force"));
+        layout_update = findViewById(ResourceUtil.getIdentifierId("layout_update"));
+        no_update = findViewById(ResourceUtil.getIdentifierId("no_update"));
+        once_update = findViewById(ResourceUtil.getIdentifierId("once_update"));
+        layout_progress = findViewById(ResourceUtil.getIdentifierId("layout_progress"));
+        progress_bar = findViewById(ResourceUtil.getIdentifierId("progress_bar"));
+        tv_progress = findViewById(ResourceUtil.getIdentifierId("tv_progress"));
 
         if (!TextUtils.isEmpty(versionName)) {
-            version_name.setText(mContext.getString(R.string.find_new, versionName));
+            version_name.setText(mContext.getString(ResourceUtil.getIdentifierString("find_new"), versionName));
         }
         if (!TextUtils.isEmpty(versionContent)) {
             String[] description = VersionUpdateUtil.splitPTag(versionContent);
@@ -120,7 +121,8 @@ public class VersionUpdateDialog extends BaseDialog implements View.OnClickListe
         layoutParams.setMargins(0, UiUtils.dp2px(mContext, 8), 0, 0);
         tv.setLayoutParams(layoutParams);
         tv.setText(textStr);
-        tv.setTextColor(mContext.getResources().getColor(R.color.gray_7e9c));
+
+        tv.setTextColor(mContext.getResources().getColor(ResourceUtil.getIdentifierColor("gray_7e9c")));
         tv.setTextSize(16);
         versionUpdateView.addView(tv);
     }
@@ -146,17 +148,18 @@ public class VersionUpdateDialog extends BaseDialog implements View.OnClickListe
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.layout_update_force) {
+
+        if (id == ResourceUtil.getIdentifierId("layout_update_force")) {
             layout_update_force.setVisibility(View.GONE);
             layout_update.setVisibility(View.GONE);
             layout_progress.setVisibility(View.VISIBLE);
             downLoad();
-        } else if (id == R.id.once_update) {
+        } else if (id == ResourceUtil.getIdentifierId("once_update")) {
             layout_update_force.setVisibility(View.GONE);
             layout_update.setVisibility(View.GONE);
             layout_progress.setVisibility(View.VISIBLE);
             downLoad();
-        } else if (id == R.id.no_update) {
+        } else if (id == ResourceUtil.getIdentifierId("no_update")) {
             dismiss();
         }
     }
@@ -183,7 +186,8 @@ public class VersionUpdateDialog extends BaseDialog implements View.OnClickListe
                                 layout_progress.setVisibility(View.VISIBLE);
                                 progress_bar.setVisibility(View.VISIBLE);
                                 tv_progress.setVisibility(View.VISIBLE);
-                                tv_progress.setText(mContext.getString(R.string.updating) + "(" + (int) progress + "%)");
+
+                                tv_progress.setText(mContext.getString(ResourceUtil.getIdentifierString("updating")) + "(" + (int) progress + "%)");
                                 progress_bar.setProgress((int) progress);
                             }
                         });

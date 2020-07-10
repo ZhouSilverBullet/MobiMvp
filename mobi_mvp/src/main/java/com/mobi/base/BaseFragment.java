@@ -14,7 +14,6 @@ import com.kingja.loadsir.core.LoadService;
 import com.kingja.loadsir.core.LoadSir;
 import com.mobi.dialog.LoadingDialog;
 import com.mobi.feature.ILoadSirDelegate;
-import com.mobi.loadsir.LoaderSirUtil;
 import com.mobi.permission.RxPermissions;
 import com.mobi.util.ToastUtils;
 

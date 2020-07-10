@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.mobi.R;
+import com.mobi.util.ResourceUtil;
 
 /**
  * Email: zhousaito@163.com
@@ -65,7 +65,7 @@ public abstract class BaseDialogContainer implements DialogInterface.OnDismissLi
     public void show(DialogStyle style) {
         switch (style) {
             case BOTTOM: {
-                dialog = new BaseDialog(activity, R.style.MobiDialogStyle) {
+                dialog = new BaseDialog(activity, ResourceUtil.getIdentifierStyle("MobiDialogStyle")) {
                     @Override
                     protected Context getActivityContext() {
                         return activity;
@@ -82,7 +82,7 @@ public abstract class BaseDialogContainer implements DialogInterface.OnDismissLi
             }
             break;
             case TOP: {
-                dialog = new BaseDialog(activity, R.style.MobiDialogStyle) {
+                dialog = new BaseDialog(activity, ResourceUtil.getIdentifierStyle("MobiDialogStyle")) {
                     @Override
                     protected Context getActivityContext() {
                         return activity;
@@ -101,7 +101,7 @@ public abstract class BaseDialogContainer implements DialogInterface.OnDismissLi
             break;
             default: //都是中间显示
                 if (dialogStyle == 0) {
-                    dialog = new Dialog(activity, R.style.MobiDialogStyleCenter);
+                    dialog = new Dialog(activity, ResourceUtil.getIdentifierStyle("MobiDialogStyleCenter"));
                 } else {
                     dialog = new Dialog(activity, dialogStyle);
                 }

@@ -2,7 +2,7 @@ package com.mobi.loadsir;
 
 
 import com.kingja.loadsir.callback.Callback;
-import com.mobi.R;
+import com.mobi.util.ResourceUtil;
 
 /**
  * Description:TODO
@@ -14,6 +14,6 @@ import com.mobi.R;
 public class ErrorCallback extends Callback {
     @Override
     protected int onCreateView() {
-        return R.layout.loadsir_layout_error;
+        return ResourceUtil.getIdentifierLayout("loadsir_layout_error");
     }
 }

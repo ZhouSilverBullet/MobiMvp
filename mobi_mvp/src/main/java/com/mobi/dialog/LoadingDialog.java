@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
-import com.mobi.R;
+import com.mobi.util.ResourceUtil;
 
 public class LoadingDialog extends BaseDialog {
     public Context context;
@@ -23,13 +23,12 @@ public class LoadingDialog extends BaseDialog {
     }
 
     public LoadingDialog(Context context, boolean isCancel) {
-        super(context, R.style.common_loading_dialog);
+        super(context, ResourceUtil.getIdentifierStyle("common_loading_dialog"));
         this.context = context;
         this.setCancelable(isCancel);
         this.setCanceledOnTouchOutside(false);
         Window window = this.getWindow();
-        window.setWindowAnimations(R.style.MobiLoadingDialogWindowStyle);
-
+        window.setWindowAnimations(ResourceUtil.getIdentifierStyle("MobiLoadingDialogWindowStyle"));
     }
 
     public void setDialogCancelable(boolean isCancel) {
@@ -54,8 +53,8 @@ public class LoadingDialog extends BaseDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.common_dialog_loading);
+        this.setContentView(ResourceUtil.getIdentifierLayout("common_dialog_loading"));
 
-        tvLoading = findViewById(R.id.tv_loading_text);
+        tvLoading = findViewById(ResourceUtil.getIdentifierId("tv_loading_text"));
     }
 }

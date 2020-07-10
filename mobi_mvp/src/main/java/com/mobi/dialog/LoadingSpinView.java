@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
-import com.mobi.R;
+import com.mobi.util.ResourceUtil;
 
 public class LoadingSpinView extends AppCompatImageView {
     private float mRotateDegrees;
@@ -23,8 +23,9 @@ public class LoadingSpinView extends AppCompatImageView {
     public LoadingSpinView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        TypedArray a = getResources().obtainAttributes(attrs, R.styleable.LoadingSpinView);
-        drawable = a.getDrawable(R.styleable.LoadingSpinView_lsv_loadSrc);
+        int[] loadingSpinViews = ResourceUtil.getResourceDeclareStyleableIntArray("LoadingSpinView");
+        TypedArray a = getResources().obtainAttributes(attrs, loadingSpinViews);
+        drawable = a.getDrawable(ResourceUtil.getStyleableIntArrayIndex("LoadingSpinView_lsv_loadSrc"));
         a.recycle();
 
         this.init();
@@ -34,7 +35,7 @@ public class LoadingSpinView extends AppCompatImageView {
         if (drawable != null) {
             setImageDrawable(drawable);
         } else {
-            this.setImageResource(R.drawable.loading);
+            this.setImageResource(ResourceUtil.getIdentifierDrawable("loading"));
         }
         this.mFrameTime = 83;
         this.mUpdateViewRunnable = new Runnable() {

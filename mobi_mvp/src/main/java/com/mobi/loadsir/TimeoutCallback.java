@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.kingja.loadsir.callback.Callback;
-import com.mobi.R;
+import com.mobi.util.ResourceUtil;
 
 /**
  * Description:TODO
@@ -18,12 +18,12 @@ public class TimeoutCallback extends Callback {
 
     @Override
     protected int onCreateView() {
-        return R.layout.loadsir_layout_timeout;
+        return ResourceUtil.getIdentifierLayout("loadsir_layout_timeout");
     }
 
     @Override
     protected boolean onReloadEvent(Context context, View view) {
-        Toast.makeText(context.getApplicationContext(),"Connecting to the network again!",Toast.LENGTH_SHORT).show();
+        Toast.makeText(context.getApplicationContext(), "Connecting to the network again!", Toast.LENGTH_SHORT).show();
         return false;
     }
 

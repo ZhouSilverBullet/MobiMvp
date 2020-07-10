@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.kingja.loadsir.callback.Callback;
-import com.mobi.R;
+import com.mobi.util.ResourceUtil;
 
 /**
  * Description:TODO
@@ -27,13 +27,13 @@ public class EmptyTextCallback extends Callback {
 
     @Override
     protected void onViewCreate(Context context, View view) {
-        TextView textView = view.findViewById(R.id.tv_empty);
+        TextView textView = view.findViewById(ResourceUtil.getIdentifierId("tv_empty"));
         textView.setText(emptyText);
     }
 
     @Override
     protected int onCreateView() {
-        return R.layout.loadsir_layout_text_empty;
+        return ResourceUtil.getIdentifierLayout("loadsir_layout_text_empty");
     }
 
 }

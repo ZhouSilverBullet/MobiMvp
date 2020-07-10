@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.View;
 
 import com.kingja.loadsir.callback.Callback;
-import com.mobi.R;
+import com.mobi.util.ResourceUtil;
 
 
 /**
@@ -18,7 +18,7 @@ public class LoadingCallback extends Callback {
 
     @Override
     protected int onCreateView() {
-        return R.layout.loadsir_layout_loading;
+        return ResourceUtil.getIdentifierLayout("loadsir_layout_loading");
     }
 
     @Override

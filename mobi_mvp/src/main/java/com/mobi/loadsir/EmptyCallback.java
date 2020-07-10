@@ -1,7 +1,7 @@
 package com.mobi.loadsir;
 
 import com.kingja.loadsir.callback.Callback;
-import com.mobi.R;
+import com.mobi.util.ResourceUtil;
 
 /**
  * Description:TODO
@@ -14,7 +14,7 @@ public class EmptyCallback extends Callback {
 
     @Override
     protected int onCreateView() {
-        return R.layout.loadsir_layout_empty;
+        return ResourceUtil.getIdentifierLayout("loadsir_layout_empty");
     }
 
 }
