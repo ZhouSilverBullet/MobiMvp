@@ -25,6 +25,7 @@ public class DefaultInterceptor implements Interceptor {
                 .addHeader("Platform-No", "1")//平台号（1-安卓 2-ios）
                 .addHeader("Device-Type", "mobile")
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .addHeader("System-ID", NetworkSession.get().getNetworkConfig().getSystemId())
                 .addHeader("Device-ID", NetworkSession.get().getNetworkConfig().getDeviceId())
                 .addHeader("X-Access-Token", NetworkSession.get().getNetworkConfig().getToken())
                 .addHeader("Mac", NetworkSession.get().getNetworkConfig().getMac())

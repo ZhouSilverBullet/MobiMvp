@@ -16,7 +16,7 @@ import com.mobi.mvp.IView;
 public abstract class BaseMvpActivity<P extends BasePresenter> extends BaseActivity implements IView {
 
     @Nullable
-    private P mPresenter;
+    protected P mPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

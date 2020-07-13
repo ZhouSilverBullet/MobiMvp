@@ -2,7 +2,9 @@ package com.mobi.mobimvp;
 
 import android.app.Application;
 
+import com.mobi.NetworkSession;
 import com.mobi.download.receiver.ConnectReceiver;
+import com.mobi.feature.NetworkConfig;
 import com.mobi.global.MobiSession;
 import com.mobi.thrid.images.loader.ImageLoader;
 
@@ -19,5 +21,6 @@ public class App extends Application {
         ConnectReceiver.start(this);
         MobiSession.getInstance().init(this);
         ImageLoader.init(this);
+        NetworkSession.get().init(this, true, new NetworkConfig.Builder().build());
     }
 }

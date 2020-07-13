@@ -62,6 +62,7 @@ public class NetworkConfig {
     private String deviceId;
 
     private String token;
+    private String systemId;
 
     private NetworkConfig(NetworkConfig.Builder builder) {
 
@@ -104,6 +105,13 @@ public class NetworkConfig {
         }
 
         this.networkCallback = builder.networkUrl;
+
+        if (TextUtils.isEmpty(builder.systemId)) {
+            this.systemId = "";
+        } else {
+            this.systemId = builder.systemId;
+        }
+
     }
 
     public SSLSocketFactory getSslSocketFactory() {
@@ -156,6 +164,9 @@ public class NetworkConfig {
     public String getToken() {
         if (networkCallback != null) {
             token = networkCallback.getToken();
+            if (TextUtils.isEmpty(token)) {
+                token = "";
+            }
         }
         return token;
     }
@@ -197,6 +208,10 @@ public class NetworkConfig {
         return deviceId;
     }
 
+    public String getSystemId() {
+        return systemId;
+    }
+
     public static class Builder {
         SSLSocketFactory sslSocketFactory;
         HostnameVerifier hostnameVerifier;
@@ -209,6 +224,8 @@ public class NetworkConfig {
         INetworkCallback networkUrl;
 
         Interceptor loggingInterceptor;
+
+        String systemId;
 
         public Builder setSslSocketFactory(@Nullable SSLSocketFactory sslSocketFactory) {
             this.sslSocketFactory = sslSocketFactory;
@@ -253,6 +270,11 @@ public class NetworkConfig {
 
         public Builder setLoggingInterceptor(@Nullable Interceptor loggingInterceptor) {
             this.loggingInterceptor = loggingInterceptor;
+            return this;
+        }
+
+        public Builder setSystemId(String systemId) {
+            this.systemId = systemId;
             return this;
         }
 

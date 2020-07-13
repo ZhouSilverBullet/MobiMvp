@@ -16,17 +16,39 @@ public class CommonSchedulers {
     public static <D> Disposable execHttp(Observable<D> observable, IRequestCallback<D> requestCallback) {
         return observable
                 .compose(observableIO2Main())
-                .subscribe(successData(requestCallback),  //成功
+                .subscribe(success(requestCallback),  //成功
                         throwableConsumer(requestCallback)); //失败
     }
 
-    private static <D> Consumer<D> successData(final IRequestCallback<D> requestCallback) {
+    private static <D> Consumer<D> success(final IRequestCallback<D> requestCallback) {
         return new Consumer<D>() {
             @Override
             public void accept(D d) throws Exception {
                 if (requestCallback != null) {
                     if (d != null) {
                         requestCallback.onSuccess(d);
+                    } else {
+                        requestCallback.onFailure(-100, "数据源为空");
+                    }
+                }
+            }
+        };
+    }
+
+    public static <D> Disposable execDataHttp(Observable<BaseResponse<D>> observable, IRequestCallback<D> requestCallback) {
+        return observable
+                .compose(observableIO2Main())
+                .subscribe(successData(requestCallback),  //成功
+                        throwableConsumer(requestCallback)); //失败
+    }
+
+    private static <D> Consumer<BaseResponse<D>> successData(final IRequestCallback<D> requestCallback) {
+        return new Consumer<BaseResponse<D>>() {
+            @Override
+            public void accept(BaseResponse<D> d) throws Exception {
+                if (requestCallback != null) {
+                    if (d != null && d.getData() != null) {
+                        requestCallback.onSuccess(d.getData());
                     } else {
                         requestCallback.onFailure(-100, "数据源为空");
                     }

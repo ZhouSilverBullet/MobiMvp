@@ -517,19 +517,23 @@ public class AppUtil {
      */
     @SuppressLint("HardwareIds")
     public static String getIMEI() {
-        Context context = NetworkSession.get().getContext();
         String imei = "";
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            //没有获取到权限
-            imei = "";
-        } else {
-            TelephonyManager tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
-            if (tm.getDeviceId() != null) {
-                imei = tm.getDeviceId();
+        try {
+            Context context = NetworkSession.get().getContext();
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                //没有获取到权限
+                imei = "";
             } else {
-                imei = Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+                TelephonyManager tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+                if (tm.getDeviceId() != null) {
+                    imei = tm.getDeviceId();
+                } else {
+                    imei = Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+                }
             }
+        } catch (Exception e) {
         }
+
         return TextUtils.isEmpty(imei) ? "" : imei;
     }
 
