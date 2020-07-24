@@ -2,6 +2,7 @@ package com.mobi.feature;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 
 import com.mobi.NetworkConst;
@@ -10,6 +11,7 @@ import com.mobi.utils.SpNetworkUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSocketFactory;
@@ -55,6 +57,7 @@ public class NetworkConfig {
     private INetworkCallback networkCallback;
     private String baseConfigUrl;
     private String baseUrl;
+    private Map<String, String> baseUrlMap;
 
     private String mac;
     private String androidId;
@@ -162,6 +165,16 @@ public class NetworkConfig {
             baseUrl = networkCallback.getBaseUrl();
         }
         return baseUrl;
+    }
+
+    public Map<String, String> getMapBaseUrl() {
+        if (networkCallback != null && baseUrlMap == null) {
+            baseUrlMap = networkCallback.getBaseUrlMap();
+            if (baseUrlMap == null) {
+                baseUrlMap = new ArrayMap<>();
+            }
+        }
+        return baseUrlMap;
     }
 
     public Dispatcher getDispatcher() {

@@ -1,6 +1,9 @@
 package com.mobi.feature;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import java.util.Map;
 
 /**
  * @author zhousaito
@@ -11,6 +14,7 @@ import android.support.annotation.Nullable;
 public interface INetworkCallback {
     /**
      * 获取 一开始配置的时候的 Url
+     *
      * @return
      */
     String getBaseConfigUrl();
@@ -23,7 +27,15 @@ public interface INetworkCallback {
     String getBaseUrl();
 
     /**
+     * 多个url的时候用来扩展
+     * @return
+     */
+    @NonNull
+    Map<String, String> getBaseUrlMap();
+
+    /**
      * 获取deviceId
+     *
      * @return
      */
     String getDeviceId();

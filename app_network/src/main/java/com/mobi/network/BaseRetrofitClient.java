@@ -1,11 +1,13 @@
 package com.mobi.network;
 
+import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 
 import com.mobi.NetworkSession;
 import com.mobi.utils.LogUtils;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Map;
 
 /**
  * @author zhousaito
@@ -18,6 +20,9 @@ public class BaseRetrofitClient<T> extends BaseOkhttpDalegate {
 
     private volatile T mConfigApi;
     private volatile T mHttpApi;
+
+    private Map<String, T> mApiMap;
+    private Map<String, LazyCreateApiInterface<T>> mApiLazyMap;
 
     private Class<T> apiClass;
 
@@ -58,12 +63,37 @@ public class BaseRetrofitClient<T> extends BaseOkhttpDalegate {
     }
 
     @Override
+    protected Map<String, String> baseUrlMap() {
+        return NetworkSession.get().getNetworkConfig().getMapBaseUrl();
+    }
+
+    @Override
     protected void initApi() {
         if (mRetrofit == null) {
             synchronized (BaseRetrofitClient.class) {
                 if (mRetrofit == null) {
                     mRetrofit = createNormalRetrofit(baseUrl(), 1);
                 }
+            }
+        }
+    }
+
+    @Override
+    protected synchronized void initApiMap() {
+        mApiMap = new ArrayMap<>();
+        mApiLazyMap = new ArrayMap<>();
+        Map<String, String> map = baseUrlMap();
+        if (map != null && map.size() > 0) {
+            int i = 2;
+            for (String key : map.keySet()) {
+                int j = i;
+                mApiLazyMap.put(key, new LazyCreateApiInterface<T>() {
+                    @Override
+                    public T create() {
+                        return createNormalRetrofit(invalidBaseUrl(map.get(key)), j).create(getApiClass());
+                    }
+                });
+                i++;
             }
         }
     }
@@ -90,10 +120,39 @@ public class BaseRetrofitClient<T> extends BaseOkhttpDalegate {
         return mHttpApi;
     }
 
+    /**
+     * 通过map来进行设置，同时创建多个retrofit来进行
+     *
+     * @param key
+     * @return
+     */
+    public T getHttpApi(String key) {
+        if (mApiMap == null) {
+            initApiMap();
+        }
+
+        T t = mApiMap.get(key);
+        if (t == null) {
+            LazyCreateApiInterface<T> apiInterface = mApiLazyMap.get(key);
+            if (apiInterface != null) {
+                t = apiInterface.create();
+            }
+        }
+        return t;
+    }
+
     private Class<T> getApiClass() {
         if (apiClass == null) {
             apiClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         }
         return apiClass;
+    }
+
+    /**
+     * 用于延迟创建对应的baseUrl的api
+     * @param <T>
+     */
+    public interface LazyCreateApiInterface<T> {
+        T create();
     }
 }

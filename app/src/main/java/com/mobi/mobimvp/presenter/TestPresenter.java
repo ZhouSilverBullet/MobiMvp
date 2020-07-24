@@ -24,7 +24,7 @@ public class TestPresenter extends BaseRxPresenter {
         param.put("channel","tencent");
 
 
-        Disposable disposable = CommonSchedulers.execHttp(RetrofitClient.getInstance().getHttpApi()
+        Disposable disposable = CommonSchedulers.execHttp(RetrofitClient.getInstance().getHttpApi("update")
                 .checkVersioin(param), new IRequestCallback<BaseResponse<Object>>() {
             @Override
             public void onSuccess(BaseResponse<Object> s) {

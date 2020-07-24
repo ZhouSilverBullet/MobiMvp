@@ -6,6 +6,7 @@ import com.mobi.NetworkSession;
 import com.mobi.utils.LogUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
@@ -56,6 +57,9 @@ public abstract class BaseOkhttpDalegate {
 
     protected abstract void initApi();
 
+
+    protected abstract void initApiMap();
+
     /**
      * 通过配置的baseUrl去请求对应的数据
      *
@@ -69,6 +73,9 @@ public abstract class BaseOkhttpDalegate {
      * @return
      */
     protected abstract String baseUrl();
+
+
+    protected abstract Map<String, String> baseUrlMap();
 
 
     protected Retrofit createNormalRetrofit(String baseUrl, int type) {

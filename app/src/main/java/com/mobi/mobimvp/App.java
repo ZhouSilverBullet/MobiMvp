@@ -1,7 +1,9 @@
 package com.mobi.mobimvp;
 
 import android.app.Application;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.util.ArrayMap;
 
 import com.mobi.NetworkSession;
 import com.mobi.download.receiver.ConnectReceiver;
@@ -13,6 +15,7 @@ import com.mobi.thrid.images.loader.ImageLoader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -52,6 +55,14 @@ public class App extends Application {
                     @Override
                     public String getBaseUrl() {
                         return "http://updateapi.dev.findwxapp.com/";
+                    }
+
+                    @NonNull
+                    @Override
+                    public Map<String, String> getBaseUrlMap() {
+                        Map<String, String> map = new ArrayMap<>();
+                        map.put("update", "http://updateapi.dev.findwxapp.com/");
+                        return map;
                     }
 
                     @Override

@@ -1,6 +1,10 @@
 package com.mobi.mobimvp.api;
 
+import android.util.Log;
+
 import com.mobi.network.BaseRetrofitClient;
+
+import retrofit2.Retrofit;
 
 /**
  * @author zhousaito
@@ -20,5 +24,16 @@ public class RetrofitClient extends BaseRetrofitClient<ApiService> {
     private static class SingletonHolder {
         private static final RetrofitClient INSTANCE = new RetrofitClient();
     }
+
+    @Override
+    protected Retrofit createNormalRetrofit(String baseUrl, int type) {
+        Log.e("RetrofitClient", "createNormalRetrofit type: " + type);
+        return super.createNormalRetrofit(baseUrl, type);
+    }
+
+    public ApiService getUpdateApi() {
+        return getHttpApi("update");
+    }
+
 
 }
