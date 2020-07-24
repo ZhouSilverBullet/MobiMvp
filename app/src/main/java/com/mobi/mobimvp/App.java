@@ -4,6 +4,7 @@ import android.app.Application;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
+import android.util.Log;
 
 import com.mobi.NetworkSession;
 import com.mobi.download.receiver.ConnectReceiver;
@@ -49,7 +50,7 @@ public class App extends Application {
                 .setNetworkCallback(new INetworkCallback() {
                     @Override
                     public String getBaseConfigUrl() {
-                        return null;
+                        return "http://updateapi.dev.findwxapp.com/";
                     }
 
                     @Override
@@ -59,9 +60,20 @@ public class App extends Application {
 
                     @NonNull
                     @Override
-                    public Map<String, String> getBaseUrlMap() {
-                        Map<String, String> map = new ArrayMap<>();
-                        map.put("update", "http://updateapi.dev.findwxapp.com/");
+                    public Map<String, Callback> getBaseUrlMap() {
+                        Map<String, Callback> map = new ArrayMap<>();
+                        map.put("update", new Callback() {
+                            @Override
+                            public String call() {
+//                                return "http://updateapi.dev.findwxapp.com/";
+                                return null;
+                            }
+
+                            @Override
+                            public void onCreateFail(String call) {
+                                Log.e("App", "onCreateFail");
+                            }
+                        });
                         return map;
                     }
 

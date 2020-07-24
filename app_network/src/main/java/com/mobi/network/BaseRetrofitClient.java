@@ -4,6 +4,7 @@ import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 
 import com.mobi.NetworkSession;
+import com.mobi.feature.INetworkCallback;
 import com.mobi.utils.LogUtils;
 
 import java.lang.reflect.ParameterizedType;
@@ -63,7 +64,7 @@ public class BaseRetrofitClient<T> extends BaseOkhttpDalegate {
     }
 
     @Override
-    protected Map<String, String> baseUrlMap() {
+    protected Map<String, INetworkCallback.Callback> baseUrlMap() {
         return NetworkSession.get().getNetworkConfig().getMapBaseUrl();
     }
 
@@ -82,7 +83,7 @@ public class BaseRetrofitClient<T> extends BaseOkhttpDalegate {
     protected synchronized void initApiMap() {
         mApiMap = new ArrayMap<>();
         mApiLazyMap = new ArrayMap<>();
-        Map<String, String> map = baseUrlMap();
+        Map<String, INetworkCallback.Callback> map = baseUrlMap();
         if (map != null && map.size() > 0) {
             int i = 2;
             for (String key : map.keySet()) {
@@ -90,7 +91,15 @@ public class BaseRetrofitClient<T> extends BaseOkhttpDalegate {
                 mApiLazyMap.put(key, new LazyCreateApiInterface<T>() {
                     @Override
                     public T create() {
-                        return createNormalRetrofit(invalidBaseUrl(map.get(key)), j).create(getApiClass());
+                        INetworkCallback.Callback callback = map.get(key);
+                        String call = callback.call();
+                        if (TextUtils.isEmpty(call)) {
+                            callback.onCreateFail(call);
+                        } else {
+                            return createNormalRetrofit(invalidBaseUrl(call), j).create(getApiClass());
+                        }
+                        // todo 错误的时候暂时返回一个config url 给到外面
+                        return createNormalRetrofit(invalidBaseUrl(baseConfigUrl()), j).create(getApiClass());
                     }
                 });
                 i++;
@@ -136,6 +145,9 @@ public class BaseRetrofitClient<T> extends BaseOkhttpDalegate {
             LazyCreateApiInterface<T> apiInterface = mApiLazyMap.get(key);
             if (apiInterface != null) {
                 t = apiInterface.create();
+                if (t != null) {
+                    mApiMap.put(key, t);
+                }
             }
         }
         return t;
@@ -150,6 +162,7 @@ public class BaseRetrofitClient<T> extends BaseOkhttpDalegate {
 
     /**
      * 用于延迟创建对应的baseUrl的api
+     *
      * @param <T>
      */
     public interface LazyCreateApiInterface<T> {

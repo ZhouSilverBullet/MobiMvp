@@ -31,7 +31,7 @@ public interface INetworkCallback {
      * @return
      */
     @NonNull
-    Map<String, String> getBaseUrlMap();
+    Map<String, Callback> getBaseUrlMap();
 
     /**
      * 获取deviceId
@@ -55,4 +55,17 @@ public interface INetworkCallback {
      * @param newToken
      */
     void refreshToken(@Nullable String newToken);
+
+
+    public interface Callback {
+        /**
+         *
+         * @return
+         */
+        String call();
+
+        default void onCreateFail(String call) {
+
+        }
+    }
 }

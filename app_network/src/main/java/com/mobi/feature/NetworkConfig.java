@@ -57,7 +57,7 @@ public class NetworkConfig {
     private INetworkCallback networkCallback;
     private String baseConfigUrl;
     private String baseUrl;
-    private Map<String, String> baseUrlMap;
+    private Map<String, INetworkCallback.Callback> baseUrlMap;
 
     private String mac;
     private String androidId;
@@ -167,7 +167,7 @@ public class NetworkConfig {
         return baseUrl;
     }
 
-    public Map<String, String> getMapBaseUrl() {
+    public Map<String, INetworkCallback.Callback> getMapBaseUrl() {
         if (networkCallback != null && baseUrlMap == null) {
             baseUrlMap = networkCallback.getBaseUrlMap();
             if (baseUrlMap == null) {

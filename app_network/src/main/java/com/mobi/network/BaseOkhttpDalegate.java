@@ -3,6 +3,7 @@ package com.mobi.network;
 import android.text.TextUtils;
 
 import com.mobi.NetworkSession;
+import com.mobi.feature.INetworkCallback;
 import com.mobi.utils.LogUtils;
 
 import java.util.List;
@@ -75,7 +76,7 @@ public abstract class BaseOkhttpDalegate {
     protected abstract String baseUrl();
 
 
-    protected abstract Map<String, String> baseUrlMap();
+    protected abstract Map<String, INetworkCallback.Callback> baseUrlMap();
 
 
     protected Retrofit createNormalRetrofit(String baseUrl, int type) {
