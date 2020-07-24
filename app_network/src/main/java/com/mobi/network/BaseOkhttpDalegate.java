@@ -134,8 +134,13 @@ public abstract class BaseOkhttpDalegate {
         }
         builder.addInterceptor(loggingInterceptor);
 
-        //默认的拦截器
-        builder.addInterceptor(new DefaultInterceptor());
+        List<Interceptor> networkInterceptors = NetworkSession.get().getNetworkConfig().getExtraNetworkInterceptor();
+        if (networkInterceptors != null) {
+            for (Interceptor interceptor : networkInterceptors) {
+                builder.addNetworkInterceptor(interceptor);
+            }
+        }
+
         //添加extraInterceptor
         List<Interceptor> interceptors = NetworkSession.get().getNetworkConfig().getExtraInterceptor();
         if (interceptors != null) {
@@ -143,6 +148,9 @@ public abstract class BaseOkhttpDalegate {
                 builder.addInterceptor(interceptor);
             }
         }
+
+        //默认的拦截器
+        builder.addInterceptor(new DefaultInterceptor());
 
         appendOkhttpBuilder(builder);
     }
@@ -176,7 +184,7 @@ public abstract class BaseOkhttpDalegate {
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
-                LogUtils.e(message.toString());
+                LogUtils.d(message.toString());
             }
         });
 

@@ -28,6 +28,7 @@ public class NetworkConfig {
     private SSLSocketFactory sslSocketFactory;
     private HostnameVerifier hostnameVerifier;
     private List<Interceptor> extraInterceptor;
+    private List<Interceptor> extraNetworkInterceptor;
 
     /**
      * 按照 秒 来实现的
@@ -79,9 +80,15 @@ public class NetworkConfig {
         }
 
         if (builder.extraInterceptor == null) {
-            builder.extraInterceptor = new ArrayList<>(0);
+            this.extraInterceptor = new ArrayList<>(0);
         } else {
             this.extraInterceptor = builder.extraInterceptor;
+        }
+
+        if (builder.extraNetworkInterceptor == null) {
+            this.extraNetworkInterceptor = new ArrayList<>(0);
+        } else {
+            this.extraNetworkInterceptor = builder.extraNetworkInterceptor;
         }
 
         if (builder.connectTimeout != 0) {
@@ -124,6 +131,10 @@ public class NetworkConfig {
 
     public List<Interceptor> getExtraInterceptor() {
         return extraInterceptor;
+    }
+
+    public List<Interceptor> getExtraNetworkInterceptor() {
+        return extraNetworkInterceptor;
     }
 
     public int getConnectTimeout() {
@@ -203,6 +214,9 @@ public class NetworkConfig {
             deviceId = SpNetworkUtil.getString(NetworkConst.KEY_DEVICE_ID);
             if (networkCallback != null && TextUtils.isEmpty(deviceId)) {
                 deviceId = networkCallback.getDeviceId();
+                if (TextUtils.isEmpty(deviceId)) {
+                    deviceId = "";
+                }
             }
         }
         return deviceId;
@@ -216,6 +230,7 @@ public class NetworkConfig {
         SSLSocketFactory sslSocketFactory;
         HostnameVerifier hostnameVerifier;
         List<Interceptor> extraInterceptor;
+        List<Interceptor> extraNetworkInterceptor;
         int connectTimeout;
         int readTimeout;
         int writeTimeout;
@@ -239,6 +254,11 @@ public class NetworkConfig {
 
         public Builder setExtraInterceptor(@Nullable List<Interceptor> extraInterceptor) {
             this.extraInterceptor = extraInterceptor;
+            return this;
+        }
+
+        public Builder setExtraNetworkInterceptor(@Nullable List<Interceptor> extraNetworkInterceptor) {
+            this.extraNetworkInterceptor = extraNetworkInterceptor;
             return this;
         }
 

@@ -53,7 +53,7 @@ public class BaseRetrofitClient<T> extends BaseOkhttpDalegate {
             mBaseUrl = NetworkSession.get().getNetworkConfig().getBaseUrl();
             mBaseUrl = invalidBaseUrl(mBaseUrl);
         }
-        LogUtils.e("mBaseUrl : " + mBaseUrl);
+        LogUtils.d("mBaseUrl : " + mBaseUrl);
         return mBaseUrl;
     }
 

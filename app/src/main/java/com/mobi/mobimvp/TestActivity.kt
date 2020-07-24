@@ -25,6 +25,10 @@ class TestActivity : BaseMvpActivity<TestPresenter>() {
             }
     }
 
+    override fun initData() {
+        mPresenter?.load()
+    }
+
     override fun initEvent() {
         btnSkipSelf.setOnClickListener {
             showProgressDialog(true, "加载中...")

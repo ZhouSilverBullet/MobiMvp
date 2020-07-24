@@ -1,7 +1,14 @@
 package com.mobi.mobimvp.api;
 
+import com.mobi.network.BaseResponse;
+
+import java.util.Map;
+
 import io.reactivex.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
+import retrofit2.http.POST;
 
 /**
  * @author zhousaito
@@ -12,4 +19,13 @@ import retrofit2.http.GET;
 public interface ApiService {
     @GET
     Observable<String> login();
+
+    /**
+     * 检查版本更新
+     *
+     * @return
+     */
+    @Headers("Content-Type: application/json")
+    @POST("version-mgr/v1/version/check")
+    Observable<BaseResponse<Object>> checkVersioin(@Body Map<String, Object> bean);
 }
